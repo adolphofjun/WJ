@@ -75,13 +75,13 @@
     <!-- 此处可以可以配置成*.do，对应struts的后缀习惯 -->
     <url-pattern>/</url-pattern>
   </servlet-mapping>
-  <!-- Spring MVC 核心配置结束 -->
 
-  <!-- 激活Tomcat的defaultServlet来处理静态文件 -->
-  <servlet-mapping>
-    <servlet-name>default</servlet-name>
-    <url-pattern>/static/*</url-pattern>
-  </servlet-mapping>
+    <!-- 激活Tomcat的defaultServlet来处理静态文件 -->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/static/*</url-pattern>
+    </servlet-mapping>
+  <!-- Spring MVC 核心配置结束 -->
 
   <!-- session 时间 -->
   <session-config>

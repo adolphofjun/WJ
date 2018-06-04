@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Fluid Layout - jQuery EasyUI Demo</title>
+    <script type="text/javascript" src="../static/js/jquery.js"></script>
+    <script type="text/javascript" src="../static/easyui/jquery-ui.js"></script>
+    <link href="../static/easyui/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../static/easyui/jquery-ui.structure.css" rel="stylesheet" type="text/css" />
+    <link href="../static/easyui/jquery-ui.theme.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="easyui-layout" style="width:400px;height:200px;">
+    <div region="west" split="true" title="Navigator" style="width:150px;">
+        <p style="padding:5px;margin:0;">Select language:</p>
+        <ul>
+            <li><a href="javascript:void(0)" onclick="showcontent('java')">Java</a></li>
+            <li><a href="javascript:void(0)" onclick="showcontent('cshape')">C#</a></li>
+            <li><a href="javascript:void(0)" onclick="showcontent('vb')">VB</a></li>
+            <li><a href="javascript:void(0)" onclick="showcontent('erlang')">Erlang</a></li>
+        </ul>
+    </div>
+    <div id="content" region="center" title="Language" style="padding:5px;">
+    </div>
+</div>
+</body>
+</html>
