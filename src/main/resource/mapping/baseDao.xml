@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pluten.base.dao.BaseDao" >
+
+
+      <insert id="saveBank" parameterType="map">
+          insert into qu_bank(name,code,type,visibility,creator,creatorTime)
+          values (#{name},#{code},#{type},#{visibility},#{creator},#{creatorTime});
+      </insert>
+      <select id="exitBankNameOrCode" resultType="java.lang.Integer" parameterType="map">
+            select count(1)
+            from qu_bank
+            where name = #{name,jdbcType=VARCHAR} or code = #{code,jdbcType=VARCHAR}
+       </select>
+
+        <delete id="deleteBank" parameterType="java.lang.Integer">
+            delete from qu_bank where id = #{id}
+        </delete>
+
+        <select id="findBankList" resultType="map" parameterType="map">
+           select
+                b.id,b.name,b.code,b.type, b.visibility,b.creator,CONVERT(nvarchar(30), b.creatorTime, 126)  as creatorTime
+            from qu_bank b
+            where 1=1
+        </select>
+
+
+
+</mapper>

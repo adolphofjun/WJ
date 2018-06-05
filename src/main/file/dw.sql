@@ -4,7 +4,7 @@ if(Exists(select * from sys.sysobjects where id=OBJECT_ID('qu_bank')))
 else   
  CREATE TABLE qu_bank
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255) NOT NULL,
 code varchar(255),
 type int,--题库类型
@@ -20,7 +20,7 @@ creatorTime datetime
 else 
  CREATE TABLE qu_question
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255) NOT NULL,
 code varchar(255),
 type_id int,--题目类型
@@ -44,7 +44,7 @@ if(Exists(select * from sys.sysobjects where id=OBJECT_ID('qu_rule')))
 else 
  CREATE TABLE qu_rule
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255) NOT NULL,
 code varchar(255),
 belong_role int,--所属角色
@@ -65,7 +65,7 @@ if(Exists(select * from sys.sysobjects where id=OBJECT_ID('qu_type')))
 else 
  CREATE TABLE qu_type
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255) NOT NULL,
 code varchar(255),
 creator int,
@@ -82,7 +82,7 @@ if(Exists(select * from sys.sysobjects where id=OBJECT_ID('qu_random_rule_id')))
 else 
  CREATE TABLE qu_random_rule_id
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 belong_rule int,
 qu_bank_id int
 )
@@ -95,7 +95,7 @@ if(Exists(select * from sys.sysobjects where id=OBJECT_ID('qu_must_rule_id')))
 else 
  CREATE TABLE qu_must_rule_id
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 belong_rule int,
 qu_bank_id int
 )
@@ -109,7 +109,7 @@ if(Exists(select * from sys.sysobjects where id=OBJECT_ID('qu_select_A')))
 else   
   CREATE TABLE qu_select_A
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255),
 code varchar(255),
 score float,
@@ -123,7 +123,7 @@ if(Exists(select * from sys.sysobjects where id=OBJECT_ID('qu_select_B')))
 else   
   CREATE TABLE qu_select_B
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255),
 code varchar(255),
 score float,
@@ -137,7 +137,7 @@ if(Exists(select * from sys.sysobjects where id=OBJECT_ID('qu_select_C')))
 else   
   CREATE TABLE qu_select_C
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255),
 code varchar(255),
 score float,
@@ -151,7 +151,7 @@ if(Exists(select * from sys.sysobjects where id=OBJECT_ID('qu_select_D')))
 else   
   CREATE TABLE qu_select_D
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255),
 code varchar(255),
 score float,
@@ -165,7 +165,7 @@ if(Exists(select * from sys.sysobjects where id=OBJECT_ID('qu_select_E')))
 else   
   CREATE TABLE qu_select_E
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255),
 code varchar(255),
 score float,
@@ -179,7 +179,7 @@ if(Exists(select * from sys.sysobjects where id=OBJECT_ID('qu_select_F')))
 else   
   CREATE TABLE qu_select_F
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255),
 code varchar(255),
 score float,
@@ -194,7 +194,7 @@ if(Exists(select * from sys.sysobjects where id=OBJECT_ID('qu_questionnaire')))
 else 
  CREATE TABLE qu_questionnaire
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255) NOT NULL,
 code varchar(255),
 visibility int ,--是否可用
@@ -211,13 +211,13 @@ if(Exists(select * from sys.sysobjects where id=OBJECT_ID('sys_emp_qu')))
 else 
  CREATE TABLE sys_emp_qu
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 qu_id int ,--对应的问卷
-creator int,
 score float,
 must_score float,
 random_score int,
 an_time datetime,
+creator int,
 creatorTime datetime,
 mender int,--修改者
 menderTime  datetime,
@@ -231,12 +231,67 @@ if(Exists(select * from sys.sysobjects where id=OBJECT_ID('sys_emp_qu_qu')))
 else 
  CREATE TABLE sys_emp_qu_qu
 (
-id int NOT NULL PRIMARY KEY,
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 emp_id int ,--对应的问卷
 qu_id int,
 qu_qu_id int,
 score float
 )
+
+
+ --员工信息表
+if(Exists(select * from sys.sysobjects where id=OBJECT_ID('sys_emp')))
+  print '该数据库表已经存在'
+else
+ CREATE TABLE sys_emp
+(
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
+name varchar(255),
+code varchar(255),
+pwd  varchar(255),
+orginId int,
+deptId int,
+creator int,
+userType int,
+creatorTime datetime,
+mender int,--修改者
+menderTime  datetime,
+)
+
+ --角色信息表
+if(Exists(select * from sys.sysobjects where id=OBJECT_ID('sys_role')))
+  print '该数据库表已经存在'
+else
+ CREATE TABLE sys_role
+(
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
+name varchar(255),
+code varchar(255),
+power varchar(255),
+orginId int,
+creator int,
+userType int,
+creatorTime datetime,
+mender int,--修改者
+menderTime  datetime,
+)
+
+ --用户角色信息表
+if(Exists(select * from sys.sysobjects where id=OBJECT_ID('sys_user_role')))
+  print '该数据库表已经存在'
+else
+ CREATE TABLE sys_user_role
+(
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
+userId int,
+roleId int,
+creator int,
+creatorTime datetime,
+mender int,--修改者
+menderTime  datetime,
+)
+
+
   
   
   

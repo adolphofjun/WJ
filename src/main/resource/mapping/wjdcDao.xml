@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pluten.wjdc.dao.WjdcDao" >
+
+    <insert id="saveRule" parameterType="map">
+        insert into qu_rule(name,code,belong_role,visibility,creator,creatorTime)
+        values (#{name},#{code},#{belong_role},#{visibility},#{creator},#{creatorTime});
+     </insert>
+
+    <insert id="saveRuleMust" parameterType="map">
+        insert into qu_must_rule_id(belong_rule,qu_bank_id)
+        values (#{belong_rule},#{qu_bank_id});
+    </insert>
+    <insert id="saveRuleRandom" parameterType="map">
+        insert into qu_random_rule_id(belong_rule,qu_bank_id)
+        values (#{belong_rule},#{qu_bank_id});
+    </insert>
+
+</mapper>

@@ -35,7 +35,7 @@ public class TestClass {
         return  "user";
     }
 
-    @RequestMapping(value = "basedata", method = RequestMethod.GET)
+    @RequestMapping(value = "basedata1", method = RequestMethod.GET)
     public String basedata(){
         System.out.println("===login=k");
         return  "basedata";
