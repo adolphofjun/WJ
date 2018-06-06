@@ -44,7 +44,6 @@ public class UserController {
     @RequestMapping(value = "findRole",method = RequestMethod.GET)
     @ApiOperation(value = "查询角色", notes = "查询角色")
     @ResponseBody
-
     public ResultMsg findRole(){
         ResultMsg resultMsg;
         try {
@@ -55,6 +54,43 @@ public class UserController {
             resultMsg = ResultUtil.systemError();
         }
         return resultMsg;
+    }
+
+    @RequestMapping(value = "register",method = RequestMethod.POST)
+    @ApiOperation(value = "注册", notes = "注册")
+    @ResponseBody
+    public String register(@RequestBody @ApiParam(name = "注册",
+            value = "传入json格式{\"name\":\"张三\",\"code\":\"zs\",\"pwd\":\"123\",\"orginId\":\"1\"," +
+                    "\"deptId\":\"1\"}", required = true) Map user){
+        ResultMsg resultMsg;
+        try {
+            if(userService.exitUserCode(user)){
+                resultMsg = ResultUtil.success("账号已存在",user);
+            }else{
+                userService.saveUser(user);
+                resultMsg = ResultUtil.success("注册成功",user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return JSON.toJSONString(resultMsg);
+    }
+
+    @RequestMapping(value = "impower",method = RequestMethod.POST)
+    @ApiOperation(value = "授权", notes = "授权")
+    @ResponseBody
+    public String impower(@RequestBody @ApiParam(name = "授权",
+            value = "传入json格式{\"userId\":\"1\",\"roleId\":\"1\"}", required = true) Map auth){
+        ResultMsg resultMsg;
+        try {
+            userService.impower(auth);
+            resultMsg = ResultUtil.success("授权成功",auth);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return JSON.toJSONString(resultMsg);
     }
 
    /* @RequestMapping(value = "find_sys_role",method = RequestMethod.GET)

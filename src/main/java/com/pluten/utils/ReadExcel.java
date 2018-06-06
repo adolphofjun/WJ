@@ -1,5 +1,6 @@
 package com.pluten.utils;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.util.*;
 
 public class ReadExcel {
+    private static Logger logger = Logger.getLogger(ReadExcel.class);
     //总行数
     private int totalRows = 0;
     //总条数
@@ -49,14 +51,13 @@ public class ReadExcel {
      * @return
      */
     public List<Map> getExcelInfo(String fileName, MultipartFile Mfile){
-
         //把spring文件上传的MultipartFile转换成CommonsMultipartFile类型
         CommonsMultipartFile cf= (CommonsMultipartFile)Mfile; //获取本地存储路径
-        File file = new  File("E:\\fileupload");
+        File file = new  File("C:\\fileupload");
         //创建一个目录 （它的路径名由当前 File 对象指定，包括任一必须的父路径。）
         if (!file.exists()) file.mkdirs();
         //新建一个文件
-        File file1 = new File("E:\\fileupload" + new Date().getTime() + ".xlsx");
+        File file1 = new File("C:\\fileupload" + new Date().getTime() + ".xlsx");
         //将上传的文件写入新建的文件中
         try {
             cf.getFileItem().write(file1);
@@ -82,11 +83,11 @@ public class ReadExcel {
             is = new FileInputStream(file1);
             //根据excel里面的内容读取客户信息
             customerList = getExcelInfo(is, isExcel2003);
-            is.close();
+            //is.close();
         }catch(Exception e){
             e.printStackTrace();
         } finally{
-            if(is !=null)
+          /*  if(is !=null)
             {
                 try{
                     is.close();
@@ -94,7 +95,7 @@ public class ReadExcel {
                     is = null;
                     e.printStackTrace();
                 }
-            }
+            }*/
         }
         return customerList;
     }
@@ -133,46 +134,96 @@ public class ReadExcel {
     private List<Map> readExcelValue(Workbook wb){
         //得到第一个shell
         Sheet sheet=wb.getSheetAt(0);
-
         //得到Excel的行数
         this.totalRows=sheet.getPhysicalNumberOfRows();
-
         //得到Excel的列数(前提是有行数)
         if(totalRows>=1 && sheet.getRow(0) != null){
             this.totalCells=sheet.getRow(0).getPhysicalNumberOfCells();
         }
-
         List<Map> customerList=new ArrayList<Map>();
-        Map customer;
+        Map map;
         //循环Excel行数,从第二行开始。标题不入库
         for(int r=1;r<totalRows;r++){
             Row row = sheet.getRow(r);
             if (row == null) continue;
-            customer = new HashMap();
-
-            //循环Excel的列
-            for(int c = 0; c <this.totalCells; c++){
-                Cell cell = row.getCell(c);
-                if (null != cell){
-                    if(c==0){//第一列不读
-                    }else if(c==1){
-                        customer.put("name",cell.getStringCellValue());//客户名称
-                    }else if(c==2){
-                        customer.put("name1",cell.getStringCellValue());//客户简称
-                    }else if(c==3){
-                        customer.put("name2",cell.getStringCellValue());//行业
-                    }else if(c==4){
-                        customer.put("name3",cell.getStringCellValue());//客户来源
-                    }else if(c==5){
-                        customer.put("name4",cell.getStringCellValue());//地址
-                    }else if(c==6){
-                        customer.put("name5",cell.getStringCellValue());//备注信息
-                    }
-                }
-            }
+            map = new HashMap();
+            Cell number = row.getCell(0);
+            map.put("number",number.getStringCellValue());//序号
+            Cell bank_id = row.getCell(1);
+            map.put("bank_id",bank_id.getStringCellValue());//
+            Cell type_id = row.getCell(2);
+            map.put("type_id",type_id.getStringCellValue());//
+            Cell keyWord = row.getCell(3);
+            map.put("keyWord",keyWord.getStringCellValue());//
+            Cell must = row.getCell(4);
+            map.put("must",must.getStringCellValue());//
+            Cell visibility = row.getCell(5);
+            map.put("visibility",visibility.getStringCellValue());//
+            Cell name = row.getCell(6);
+            map.put("name",name.getStringCellValue());//题目
+            getSelect(map,row);
             //添加客户
-            customerList.add(customer);
+            customerList.add(map);
         }
         return customerList;
+    }
+
+    public void getSelect(Map map,Row row){
+        int initN = 7;
+        Cell count = row.getCell(initN);
+        String countStr = count.getStringCellValue();
+        if(countStr!=null || "".endsWith(countStr)){
+            Integer integer = Integer.parseInt(countStr);
+            map.put("RowNum",integer);
+            logger.info("========="+countStr);
+            for(int i=initN+1; i<=(initN+integer*2); i++){
+                Cell cell = row.getCell(i);
+                if(i==initN+1){
+                    map.put("A",cell.getStringCellValue());//序号
+                    Cell score = row.getCell(i+1);
+                    map.put("AScore",score.getStringCellValue());//序号
+                }else  if(i==initN+3){
+                    map.put("B",cell.getStringCellValue());//序号
+                    Cell score = row.getCell(i+1);
+                    map.put("BScore",score.getStringCellValue());//序号
+                }else  if(i==initN+5){
+                    map.put("C",cell.getStringCellValue());//序号
+                    Cell score = row.getCell(i+1);
+                    map.put("CScore",score.getStringCellValue());//序号
+                }
+                else  if(i==initN+7){
+                    map.put("D",cell.getStringCellValue());//序号
+                    Cell score = row.getCell(i+1);
+                    map.put("DScore",score.getStringCellValue());//序号
+                }
+                else  if(i==initN+9){
+                    map.put("E",cell.getStringCellValue());//序号
+                    Cell score = row.getCell(i+1);
+                    map.put("EScore",score.getStringCellValue());//序号
+                }
+                if(i==initN+11){
+                    map.put("F",cell.getStringCellValue());//序号
+                    Cell score = row.getCell(i+1);
+                    map.put("FScore",score.getStringCellValue());//序号
+                }
+                else  if(i==initN+13){
+                    map.put("G",cell.getStringCellValue());//序号
+                    Cell score = row.getCell(i+1);
+                    map.put("GScore",score.getStringCellValue());//序号
+                }
+                else  if(i==initN+15){
+                    map.put("H",cell.getStringCellValue());//序号
+                    Cell score = row.getCell(i+1);
+                    map.put("HScore",score.getStringCellValue());//序号
+                }
+                else  if(i==initN+17){
+                    map.put("I",cell.getStringCellValue());//序号
+                    Cell score = row.getCell(i+1);
+                    map.put("IScore",score.getStringCellValue());//序号
+                }
+            }
+        }
+
+
     }
 }

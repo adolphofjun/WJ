@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pluten.auth.dao.AuthDao" >
+
+
+      <select id="findRoleOfUser"  parameterType="java.lang.Integer"  resultType="map">
+            select ro.id as roleId,ro.name,ro.code,ro.power
+                from sys_emp emp,sys_user_role ur,sys_role ro
+                where emp.id = ur.userId and ur.roleId = ro.id and  emp.id = #{userId}
+      </select>
+      <select id="findUserOfRole" resultType="map" parameterType="java.lang.Integer">
+            select emp.id as userId,emp.name,emp.code
+                from sys_emp emp,sys_user_role ur,sys_role ro
+                where emp.id = ur.userId and ur.roleId = ro.id and  ro.id = #{roleId}
+       </select>
+
+
+
+
+
+</mapper>

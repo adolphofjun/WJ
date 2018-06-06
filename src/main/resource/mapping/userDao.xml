@@ -23,6 +23,28 @@
             where name = #{name,jdbcType=VARCHAR} or code = #{code,jdbcType=VARCHAR}
         </select>
 
+        <select id="exitUserCode" resultType="java.lang.Integer" parameterType="map">
+            select count(1)
+            from sys_emp
+            where code = #{code,jdbcType=VARCHAR}
+        </select>
+        <insert id="saveUser" parameterType="map">
+            insert into sys_emp(name,code,pwd,orginId,deptId,creator,creatorTime)
+            values (#{name},#{code},#{pwd},#{orginId},#{deptId},#{creator},#{creatorTime});
+        </insert>
+
+        <select id="findUserById" parameterType="java.lang.Integer" resultType="map">
+            select * from sys_emp where id = #{userId}
+        </select>
+
+        <select id="findUsersByRoleId" parameterType="java.lang.Integer" resultType="map">
+            select * from sys_emp where id = #{userId}
+        </select>
+
+        <insert id="impower" parameterType="map">
+            insert into sys_user_role(userId,roleId,creator,creatorTime)
+            values (#{userId},#{roleId},#{creator},#{creatorTime});
+        </insert>
 
 
 </mapper>

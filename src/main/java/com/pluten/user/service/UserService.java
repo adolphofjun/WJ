@@ -17,7 +17,7 @@ public interface UserService {
      * @return
      */
     void saveRole(Map map);
-
+    boolean exitRoleNameOrCode(Map bank);
     Map findUser(Map map);
 
     /**
@@ -26,12 +26,20 @@ public interface UserService {
      * @return
      */
     Integer checkUser(Map map);
+    void saveUser(Map user);
+    boolean exitUserCode(Map user);
 
     void deleteUser(Integer id);
 
     void updateUser(Map map);
 
-    void addUser(Map map);
 
-    boolean exitRoleNameOrCode(Map bank);
+
+
+    /**
+     * 授权
+     * @param map
+     * @return
+     */
+    void impower(Map map);
 }

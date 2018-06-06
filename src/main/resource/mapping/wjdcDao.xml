@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.pluten.wjdc.dao.WjdcDao" >
 
-    <insert id="saveRule" parameterType="map">
+    <insert id="saveRule" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
         insert into qu_rule(name,code,belong_role,visibility,creator,creatorTime)
         values (#{name},#{code},#{belong_role},#{visibility},#{creator},#{creatorTime});
      </insert>
@@ -15,5 +15,107 @@
         insert into qu_random_rule_id(belong_rule,qu_bank_id)
         values (#{belong_rule},#{qu_bank_id});
     </insert>
+    <select id="findRule" parameterType="map" resultType="map">
+        select  ru.id,ru.name,ru.code,ru.belong_role as roleId,ro.name as roleName,ru.visibility,
+            ru.creator,emp.name as creatorName,CONVERT(nvarchar(30), ru.creatorTime, 126)  as creatorTime
+        from qu_rule ru
+        left join sys_emp emp on emp.id = ru.creator
+        left join sys_role ro on ro.id = ru.belong_role
+    </select>
+    <select id="findRuleMust" resultType="map" parameterType="java.lang.Integer">
+         select ru.id,bank.id as bankId,bank.name from qu_must_rule_id ru
+            left join qu_bank bank on bank.id = ru.qu_bank_id
+            where ru.belong_rule = #{ruleId}
+    </select>
+    <select id="findRuleRandom" resultType="map" parameterType="java.lang.Integer">
+         select ru.id,bank.id as bankId,bank.name from qu_random_rule_id ru
+            left join qu_bank bank on bank.id = ru.qu_bank_id
+            where ru.belong_rule = #{ruleId}
+    </select>
+
+
+
+    <insert id="saveQuestion"  parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into qu_question(name,code,type_id,must,bank_id,visibility,keyWord,isDelete,creator,creatorTime)
+        values (#{name},#{code},#{type_id},#{must},#{bank_id},#{visibility},#{keyWord},#{isDelete},#{creator},#{creatorTime});
+    </insert>
+    <insert id="saveSelectA" parameterType="map">
+        insert into qu_select_A(name,code,score,belong_qu,title)
+        values (#{name},#{code},#{score},#{belong_qu},#{title});
+    </insert>
+    <insert id="saveSelectB" parameterType="map">
+        insert into qu_select_B(name,code,score,belong_qu,title)
+        values (#{name},#{code},#{score},#{belong_qu},#{title});
+    </insert>
+    <insert id="saveSelectC" parameterType="map">
+        insert into qu_select_C(name,code,score,belong_qu,title)
+        values (#{name},#{code},#{score},#{belong_qu},#{title});
+    </insert>
+    <insert id="saveSelectD" parameterType="map">
+        insert into qu_select_D(name,code,score,belong_qu,title)
+        values (#{name},#{code},#{score},#{belong_qu},#{title});
+    </insert>
+    <insert id="saveSelectE" parameterType="map">
+        insert into qu_select_E(name,code,score,belong_qu,title)
+        values (#{name},#{code},#{score},#{belong_qu},#{title});
+    </insert>
+    <insert id="saveSelectF" parameterType="map">
+        insert into qu_select_F(name,code,score,belong_qu,title)
+        values (#{name},#{code},#{score},#{belong_qu},#{title});
+    </insert>
+
+    <select id="findQuestion" parameterType="map" resultType="map">
+        select qu.id,qu.name,qu.code,qu.type_id,
+            qu.must,qu.bank_id,bank.name as bankName,qu.visibility,
+            qu.isDelete,qu.keyWord,qu.creator,emp.name as creatorName,
+            qu.creatorTime
+        from qu_question qu
+        left join qu_bank bank on bank.id = qu.bank_id
+        left join sys_emp emp on emp.id = qu.creator
+    </select>
+
+    <select id="findSelectA" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name as name from qu_select_a a where a.belong_qu = #{questionId}
+    </select>
+    <select id="findSelectB" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name as name from qu_select_b a where a.belong_qu = #{questionId}
+    </select>
+    <select id="findSelectC" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name as name from qu_select_c a where a.belong_qu = #{questionId}
+    </select>
+    <select id="findSelectD" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name as name from qu_select_d a where a.belong_qu = #{questionId}
+    </select>
+    <select id="findSelectE" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name as name from qu_select_e a where a.belong_qu = #{questionId}
+    </select>
+    <select id="findSelectF" resultType="map" parameterType="java.lang.Integer">
+        select a.id,a.title as title,a.score as score,a.name as name from qu_select_f a where a.belong_qu = #{questionId}
+    </select>
+
+    <insert id="newWj" parameterType="map">
+        insert into qu_questionnaire (name,code,visibility,rule_id,creator,creatorTime)
+        values(#{name},#{code},#{visibility},#{rule_id},#{creator},#{creatorTime})
+    </insert>
+    <select id="findWjTitle" resultType="map" parameterType="map">
+        select qu.id,qu.name,qu.code,qu.visibility,qu.creator as creatorId,emp.name as creatorName,CONVERT(nvarchar(30), qu.creatorTime, 126)  as creatorTime,
+            qu.rule_Id
+            from qu_questionnaire qu
+            left join sys_emp emp on emp.id = qu.creator
+    </select>
+
+    <select id="findWjTarget" resultType="map" parameterType="java.lang.Integer">
+        select emp.name,emp.id as userId
+            from qu_questionnaire qu,qu_rule qru,sys_emp emp,sys_user_role ur
+            where qu.rule_Id = qru.id and qru.belong_role = ur.roleId and ur.userId = emp.id and qu.id = #{quId}
+    </select>
+
+    <select id="findMustBankIdByWjId" resultType="map" parameterType="java.lang.Integer">
+        select emp.name,emp.id as userId
+        from qu_questionnaire qu,qu_rule qru,sys_emp emp,sys_user_role ur
+        where qu.rule_Id = qru.id and qru.belong_role = ur.roleId and ur.userId = emp.id and qu.id = #{quId}
+    </select>
+
+
 
 </mapper>

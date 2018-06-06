@@ -202,7 +202,8 @@ creator int,
 creatorTime datetime,
 mender int,--修改者
 menderTime  datetime,
-qu_id varchar(1000)--问卷对应的题目ID
+qu_id varchar(1000),--问卷对应的题目ID
+rule_id init
 )
 
  --员工接受到的问卷表
@@ -232,7 +233,7 @@ else
  CREATE TABLE sys_emp_qu_qu
 (
 id int NOT NULL PRIMARY KEY IDENTITY(1,1),
-emp_id int ,--对应的问卷
+emp_id int ,--对应的员工
 qu_id int,
 qu_qu_id int,
 score float
@@ -290,6 +291,15 @@ creatorTime datetime,
 mender int,--修改者
 menderTime  datetime,
 )
+
+truncate table qu_question
+truncate table qu_select_a
+truncate table qu_select_b
+truncate table qu_select_c
+truncate table qu_select_d
+truncate table qu_select_e
+truncate table qu_select_f
+
 
 
   

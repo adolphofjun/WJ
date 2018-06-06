@@ -36,12 +36,28 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    public void saveUser(Map user) {
+        userDao.saveUser(user);
+    }
+
+    public boolean exitUserCode(Map user) {
+        Integer is = userDao.exitUserCode(user);
+        if(is!=0) return  true;
+        else return false;
+    }
+
     public void deleteUser(Integer id) {
 
     }
 
     public void updateUser(Map map) {
 
+    }
+
+    public void impower(Map map) {
+        if(!map.containsKey("creator")) map.put("creator","1");
+        map.put("creatorTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
+         userDao.impower(map);
     }
 
     public void addUser(Map map) {

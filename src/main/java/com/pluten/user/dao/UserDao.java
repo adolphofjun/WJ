@@ -27,10 +27,16 @@ public interface UserDao {
      * @return
      */
     Integer checkUser(Map map);
-
+    void saveUser(Map user);
+    Integer exitUserCode(Map user);
     void deleteUser(Integer id);
-
     void updateUser(Map map);
+    Map findUserById(Integer userId);
 
-    void addUser(Map map);
+    /**
+     * 授权
+     * @param map
+     * @return
+     */
+    void impower(Map map);
 }
