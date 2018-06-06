@@ -124,8 +124,8 @@ public class WjdcController {
     public ResultMsg findQuestionOfWj(@PathVariable Integer wjId){
         ResultMsg resultMsg;
         try {
-            //List<Map> maps = wjdcService.findWjTarget(wjId);
-            resultMsg = ResultUtil.success("获取问卷的所有对象成功",null);
+            List<Map> maps = wjdcService.findQuestionOfWj(wjId);
+            resultMsg = ResultUtil.success("获取问卷的所有对象成功",maps);
         } catch (Exception e) {
             e.printStackTrace();
             resultMsg = ResultUtil.systemError();
@@ -152,23 +152,30 @@ public class WjdcController {
     @ResponseBody
     public ResultMsg batchimport(MultipartFile file,
                               HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String Msg ="";
-        //判断文件是否为空
-        if(file==null) return ResultUtil.success("文件为空","null");
-        //获取文件名
-        String name=file.getOriginalFilename();
-        logger.info("========文件名"+name);
-        //进一步判断文件是否为空（即判断其大小是否为0或其名称是否为null）
-        long size=file.getSize();
-        if(name==null || ("").equals(name) && size==0) return ResultUtil.success("文件为空","null");;
-        //批量导入。参数：文件名，文件。
-        boolean b = batchImport(name,file);
-        if(b){
-             Msg ="批量导入EXCEL成功！";
-        }else{
-             Msg ="批量导入EXCEL失败！";
+        ResultMsg resultMsg;
+        try {
+            String Msg ="";
+            //判断文件是否为空
+            if(file==null) return ResultUtil.success("文件为空","null");
+            //获取文件名
+            String name=file.getOriginalFilename();
+            logger.info("========文件名"+name);
+            //进一步判断文件是否为空（即判断其大小是否为0或其名称是否为null）
+            long size=file.getSize();
+            if(name==null || ("").equals(name) && size==0) return ResultUtil.success("文件为空","null");;
+            //批量导入。参数：文件名，文件。
+            boolean b = batchImport(name,file);
+            if(b){
+                Msg ="批量导入EXCEL成功！";
+            }else{
+                Msg ="批量导入EXCEL失败！";
+            }
+            resultMsg = ResultUtil.success(Msg,name);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
         }
-        return ResultUtil.success(Msg,name);
+        return resultMsg;
     }
     public boolean batchImport(String name,MultipartFile file){
         boolean b = false;

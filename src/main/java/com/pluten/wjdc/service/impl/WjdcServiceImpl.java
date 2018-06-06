@@ -65,7 +65,6 @@ public class WjdcServiceImpl implements WjdcService {
             if(!temp.containsKey("creator")) temp.put("creator","1");
             temp.put("creatorTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
             wjdcDao.saveQuestion(temp);
-            //logger.info("========="+temp.toString());
             Object ob = temp.get("id");
             Integer questionId = Integer.parseInt(ob.toString());
             saveSelectMap(temp, questionId);
@@ -79,36 +78,34 @@ public class WjdcServiceImpl implements WjdcService {
 
     public List<Map> findQuestion(Map map) {
         List<Map> rs = new ArrayList<Map>();
-
         List<Map> temps = wjdcDao.findQuestion(map);
         for(int i=0; i<temps.size(); i++){
             Map temp = temps.get(i);
             Integer questionId = (Integer) temp.get("id");
-            Map tempA = wjdcDao.findSelectA(questionId);
-            Map tempB = wjdcDao.findSelectB(questionId);
-            Map tempC = wjdcDao.findSelectC(questionId);
-            Map tempD = wjdcDao.findSelectD(questionId);
-            Map tempE = wjdcDao.findSelectE(questionId);
-            Map tempF = wjdcDao.findSelectF(questionId);
-            List<Map> selectArr = new ArrayList<Map>();
-            if(tempA!=null)selectArr.add(tempA);
-            if(tempB!=null)selectArr.add(tempB);
-            if(tempC!=null)selectArr.add(tempC);
-            if(tempD!=null)selectArr.add(tempD);
-            if(tempE!=null)selectArr.add(tempE);
-            if(tempF!=null)selectArr.add(tempF);
-            temp.put("opetion","NO");
-             temp.put("select",selectArr);
-          /*  temp.put("selectA",tempA);
-            temp.put("selectB",tempB);
-            temp.put("selectC",tempC);
-            temp.put("selectD",tempD);
-            temp.put("selectE",tempE);
-            temp.put("selectF",tempF);*/
+            getQuestionSelect(temp,questionId);
             rs.add(temp);
         }
         return rs;
     }
+
+    private void getQuestionSelect(Map temp, Integer questionId) {
+        Map tempA = wjdcDao.findSelectA(questionId);
+        Map tempB = wjdcDao.findSelectB(questionId);
+        Map tempC = wjdcDao.findSelectC(questionId);
+        Map tempD = wjdcDao.findSelectD(questionId);
+        Map tempE = wjdcDao.findSelectE(questionId);
+        Map tempF = wjdcDao.findSelectF(questionId);
+        List<Map> selectArr = new ArrayList<Map>();
+        if(tempA!=null)selectArr.add(tempA);
+        if(tempB!=null)selectArr.add(tempB);
+        if(tempC!=null)selectArr.add(tempC);
+        if(tempD!=null)selectArr.add(tempD);
+        if(tempE!=null)selectArr.add(tempE);
+        if(tempF!=null)selectArr.add(tempF);
+        temp.put("opetion","NO");
+        temp.put("select",selectArr);
+    }
+
 
     public void newWj(Map map) {
         if(!map.containsKey("creator")) map.put("creator","1");
@@ -118,6 +115,36 @@ public class WjdcServiceImpl implements WjdcService {
 
     public List<Map> findWjTarget(Integer quId) {
         return wjdcDao.findWjTarget(quId);
+    }
+
+    public List<Map> findQuestionOfWj(Integer wjId) {
+        List<Map> rs = new ArrayList<Map>();
+        List<Map> musts = wjdcDao.findMustBankIdByWjId(wjId);
+        List<Map> randoms = wjdcDao.findRandomBankIdByWjId(wjId);
+
+        List<Map> randoms_ = getRandom_(randoms);
+
+        for(int i=0; i<musts.size(); i++){
+            Map temp = musts.get(i);
+            Integer questionId = (Integer) temp.get("id");
+            getQuestionSelect(temp,questionId);
+            rs.add(temp);
+        }
+        return rs;
+    }
+
+    /**
+     * 从随机题中随机选题目
+     * @param randoms
+     * @return
+     */
+    private List<Map> getRandom_(List<Map> randoms) {
+        List<Map> maps = new ArrayList<Map>();
+        Random ra =new Random();
+        ra.nextDouble();//获取随机数
+
+
+        return  maps;
     }
 
     public void saveSelectMap(Map temp,Integer questionId){

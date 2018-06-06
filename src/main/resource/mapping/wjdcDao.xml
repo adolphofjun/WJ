@@ -111,9 +111,17 @@
     </select>
 
     <select id="findMustBankIdByWjId" resultType="map" parameterType="java.lang.Integer">
-        select emp.name,emp.id as userId
-        from qu_questionnaire qu,qu_rule qru,sys_emp emp,sys_user_role ur
-        where qu.rule_Id = qru.id and qru.belong_role = ur.roleId and ur.userId = emp.id and qu.id = #{quId}
+          select qu.id,qu.name
+            from qu_questionnaire wj,qu_rule ru,qu_must_rule_id mustId,qu_question qu
+            where wj.rule_Id = ru.id and mustId.belong_rule = ru.id and mustId.qu_bank_id = qu.bank_id
+            and qu.must = 1 and wj.id = #{wjId}
+    </select>
+
+    <select id="findRandomBankIdByWjId" resultType="map" parameterType="java.lang.Integer">
+          select qu.id,qu.name
+            from qu_questionnaire wj, qu_rule ru, qu_random_rule_id randomId, qu_question qu
+            where  wj.rule_Id = ru.id and randomId.belong_rule = ru.id and randomId.qu_bank_id = qu.bank_id
+            and qu.must = 0 and wj.id = #{wjId}
     </select>
 
 

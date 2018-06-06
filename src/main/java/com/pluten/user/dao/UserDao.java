@@ -18,7 +18,6 @@ public interface UserDao {
      * @return
      */
     void saveRole(Map map);
-
     Map findUser(Map map);
 
     /**

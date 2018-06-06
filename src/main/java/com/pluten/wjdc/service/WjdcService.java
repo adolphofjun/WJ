@@ -34,4 +34,11 @@ public interface WjdcService {
      * @return
      */
     List<Map> findWjTarget(Integer quId);
+
+    /**
+     * 获取问卷的题目
+     * @param wjId
+     * @return
+     */
+    List<Map> findQuestionOfWj(Integer wjId);
 }

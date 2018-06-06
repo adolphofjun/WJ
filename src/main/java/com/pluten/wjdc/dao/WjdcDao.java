@@ -70,6 +70,14 @@ public interface WjdcDao {
      */
     List<Map> findMustBankIdByWjId(Integer wjId);
 
+    /**
+     * 据问卷Id获取到该问卷中的随机题题库下的题目
+     * @param wjId
+     * @return
+     */
+    List<Map> findRandomBankIdByWjId(Integer wjId);
+
+
 
 
 }

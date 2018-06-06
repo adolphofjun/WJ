@@ -25,7 +25,7 @@ public interface UserService {
      * @param map
      * @return
      */
-    Integer checkUser(Map map);
+    boolean checkUser(Map map);
     void saveUser(Map user);
     boolean exitUserCode(Map user);
 

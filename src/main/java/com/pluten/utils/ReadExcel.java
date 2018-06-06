@@ -53,11 +53,11 @@ public class ReadExcel {
     public List<Map> getExcelInfo(String fileName, MultipartFile Mfile){
         //把spring文件上传的MultipartFile转换成CommonsMultipartFile类型
         CommonsMultipartFile cf= (CommonsMultipartFile)Mfile; //获取本地存储路径
-        File file = new  File("C:\\fileupload");
+        File file = new  File("E:\\fileupload");
         //创建一个目录 （它的路径名由当前 File 对象指定，包括任一必须的父路径。）
         if (!file.exists()) file.mkdirs();
         //新建一个文件
-        File file1 = new File("C:\\fileupload" + new Date().getTime() + ".xlsx");
+        File file1 = new File("E:\\fileupload" + new Date().getTime() + ".xlsx");
         //将上传的文件写入新建的文件中
         try {
             cf.getFileItem().write(file1);
@@ -148,18 +148,25 @@ public class ReadExcel {
             if (row == null) continue;
             map = new HashMap();
             Cell number = row.getCell(0);
+            number.setCellType(Cell.CELL_TYPE_STRING);
             map.put("number",number.getStringCellValue());//序号
             Cell bank_id = row.getCell(1);
+            bank_id.setCellType(Cell.CELL_TYPE_STRING);
             map.put("bank_id",bank_id.getStringCellValue());//
             Cell type_id = row.getCell(2);
+            type_id.setCellType(Cell.CELL_TYPE_STRING);
             map.put("type_id",type_id.getStringCellValue());//
             Cell keyWord = row.getCell(3);
+            keyWord.setCellType(Cell.CELL_TYPE_STRING);
             map.put("keyWord",keyWord.getStringCellValue());//
             Cell must = row.getCell(4);
+            must.setCellType(Cell.CELL_TYPE_STRING);
             map.put("must",must.getStringCellValue());//
             Cell visibility = row.getCell(5);
+            visibility.setCellType(Cell.CELL_TYPE_STRING);
             map.put("visibility",visibility.getStringCellValue());//
             Cell name = row.getCell(6);
+            name.setCellType(Cell.CELL_TYPE_STRING);
             map.put("name",name.getStringCellValue());//题目
             getSelect(map,row);
             //添加客户
@@ -171,6 +178,7 @@ public class ReadExcel {
     public void getSelect(Map map,Row row){
         int initN = 7;
         Cell count = row.getCell(initN);
+        count.setCellType(Cell.CELL_TYPE_STRING);
         String countStr = count.getStringCellValue();
         if(countStr!=null || "".endsWith(countStr)){
             Integer integer = Integer.parseInt(countStr);
@@ -178,47 +186,57 @@ public class ReadExcel {
             logger.info("========="+countStr);
             for(int i=initN+1; i<=(initN+integer*2); i++){
                 Cell cell = row.getCell(i);
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 if(i==initN+1){
                     map.put("A",cell.getStringCellValue());//序号
                     Cell score = row.getCell(i+1);
+                    score.setCellType(Cell.CELL_TYPE_STRING);
                     map.put("AScore",score.getStringCellValue());//序号
                 }else  if(i==initN+3){
                     map.put("B",cell.getStringCellValue());//序号
                     Cell score = row.getCell(i+1);
+                    score.setCellType(Cell.CELL_TYPE_STRING);
                     map.put("BScore",score.getStringCellValue());//序号
                 }else  if(i==initN+5){
                     map.put("C",cell.getStringCellValue());//序号
                     Cell score = row.getCell(i+1);
+                    score.setCellType(Cell.CELL_TYPE_STRING);
                     map.put("CScore",score.getStringCellValue());//序号
                 }
                 else  if(i==initN+7){
                     map.put("D",cell.getStringCellValue());//序号
                     Cell score = row.getCell(i+1);
+                    score.setCellType(Cell.CELL_TYPE_STRING);
                     map.put("DScore",score.getStringCellValue());//序号
                 }
                 else  if(i==initN+9){
                     map.put("E",cell.getStringCellValue());//序号
                     Cell score = row.getCell(i+1);
+                    score.setCellType(Cell.CELL_TYPE_STRING);
                     map.put("EScore",score.getStringCellValue());//序号
                 }
                 if(i==initN+11){
                     map.put("F",cell.getStringCellValue());//序号
                     Cell score = row.getCell(i+1);
+                    score.setCellType(Cell.CELL_TYPE_STRING);
                     map.put("FScore",score.getStringCellValue());//序号
                 }
                 else  if(i==initN+13){
                     map.put("G",cell.getStringCellValue());//序号
                     Cell score = row.getCell(i+1);
+                    score.setCellType(Cell.CELL_TYPE_STRING);
                     map.put("GScore",score.getStringCellValue());//序号
                 }
                 else  if(i==initN+15){
                     map.put("H",cell.getStringCellValue());//序号
                     Cell score = row.getCell(i+1);
+                    score.setCellType(Cell.CELL_TYPE_STRING);
                     map.put("HScore",score.getStringCellValue());//序号
                 }
                 else  if(i==initN+17){
                     map.put("I",cell.getStringCellValue());//序号
                     Cell score = row.getCell(i+1);
+                    score.setCellType(Cell.CELL_TYPE_STRING);
                     map.put("IScore",score.getStringCellValue());//序号
                 }
             }

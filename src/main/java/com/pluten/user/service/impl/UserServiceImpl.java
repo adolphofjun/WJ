@@ -32,8 +32,10 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    public Integer checkUser(Map map) {
-        return null;
+    public boolean checkUser(Map map) {
+        Integer is = userDao.checkUser(map);
+        if(is!=0) return  true;
+        else return false;
     }
 
     public void saveUser(Map user) {

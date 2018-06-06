@@ -23,6 +23,12 @@
             where name = #{name,jdbcType=VARCHAR} or code = #{code,jdbcType=VARCHAR}
         </select>
 
+        <select id="checkUser" resultType="java.lang.Integer" parameterType="map">
+            select count(1)
+            from sys_emp
+            where pwd = #{pwd,jdbcType=VARCHAR} and code = #{code,jdbcType=VARCHAR}
+        </select>
+
         <select id="exitUserCode" resultType="java.lang.Integer" parameterType="map">
             select count(1)
             from sys_emp

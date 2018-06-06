@@ -2,15 +2,18 @@ package com.pluten.user.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.pluten.user.service.UserService;
+import com.pluten.utils.Globel;
 import com.pluten.utils.ResultMsg;
 import com.pluten.utils.ResultUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javafx.scene.chart.ValueAxis;
+import jdk.nashorn.internal.objects.Global;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +36,26 @@ public class UserController {
             }else{
                 userService.saveRole(role);
                 resultMsg = ResultUtil.success("添加角色成功",role);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return JSON.toJSONString(resultMsg);
+    }
+
+
+    @RequestMapping(value = "login",method = RequestMethod.POST)
+    @ApiOperation(value = "登录", notes = "登录")
+    @ResponseBody
+    public String login(@RequestBody @ApiParam(name = "角色", value = "传入json格式{\"name\":\"管理员\",\"code\":\"admin\",\"pwd\":\"123456\"}", required = true) Map user,HttpServletRequest request){
+        ResultMsg resultMsg;
+        try {
+            if(userService.checkUser(user)){
+                request.getSession().setAttribute(Globel.USER_SESSION_KEY, user);
+                resultMsg = ResultUtil.success("登录成功",user);
+            }else{
+                resultMsg = ResultUtil.success("账号不存在或密码错误！",user);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,18 +116,4 @@ public class UserController {
         return JSON.toJSONString(resultMsg);
     }
 
-   /* @RequestMapping(value = "find_sys_role",method = RequestMethod.GET)
-    @ApiOperation(value = "查询角色", notes = "查询角色")
-    @ResponseBody
-    public ResultMsg find_sys_role(){
-        ResultMsg resultMsg;
-        try {
-            List<Map> maps = userService.findRoleList(null);
-            resultMsg = ResultUtil.success("查询角色库成功",maps);
-        } catch (Exception e) {
-            e.printStackTrace();
-            resultMsg = ResultUtil.systemError();
-        }
-        return resultMsg;
-    }*/
 }
