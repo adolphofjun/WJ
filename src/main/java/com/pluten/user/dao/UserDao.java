@@ -26,6 +26,7 @@ public interface UserDao {
      * @return
      */
     Integer checkUser(Map map);
+    Map findUserByCode(String userCode);
     void saveUser(Map user);
     Integer exitUserCode(Map user);
     void deleteUser(Integer id);

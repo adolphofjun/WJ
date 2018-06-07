@@ -19,6 +19,7 @@ public interface UserService {
     void saveRole(Map map);
     boolean exitRoleNameOrCode(Map bank);
     Map findUser(Map map);
+    Map findUserByCode(String userCode);
 
     /**
      * 登录检查用户名和密码

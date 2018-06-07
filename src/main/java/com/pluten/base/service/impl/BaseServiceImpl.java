@@ -42,4 +42,8 @@ public class BaseServiceImpl implements BaseService {
     public List<Map> findBankList(Map map) {
         return baseDao.findBankList(map);
     }
+
+    public void updateBankState(Map map) {
+        baseDao.updateBankState(map);
+    }
 }

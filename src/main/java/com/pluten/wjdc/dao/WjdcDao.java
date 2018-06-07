@@ -10,6 +10,8 @@ public interface WjdcDao {
     Integer saveRuleMust(Map map);
 
     Integer saveRuleRandom(Map map);
+    void updateRuleState(Map rule);
+    void deleteRuleById(Integer ruleId);
 
     List<Map> findRule(Map map);
     List<Map> findRuleMust(Integer ruleId);

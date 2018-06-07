@@ -29,6 +29,7 @@ public class WjdcServiceImpl implements WjdcService {
         must = (List<String>) rule.get("must_bank");
 
         Integer ruleId = wjdcDao.saveRule(rule);
+        ruleId = (Integer) rule.get("id");
         System.out.println("=========="+ruleId);
         for(int i=0; i<random.size(); i++){
             Map temp = new HashMap();
@@ -131,6 +132,14 @@ public class WjdcServiceImpl implements WjdcService {
             rs.add(temp);
         }
         return rs;
+    }
+
+    public void updateRuleState(Map rule) {
+        wjdcDao.updateRuleState(rule);
+    }
+
+    public void deleteRuleById(Integer ruleId) {
+        wjdcDao.deleteRuleById(ruleId);
     }
 
     /**

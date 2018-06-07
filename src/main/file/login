@@ -1,0 +1,23 @@
+then(res => {
+          if (!ObjectUtils.isNullOrEmpty(res.data.data)) {
+            if (res.data.data.userType === 'user') {
+              StorageUtils.set("user", res.data.data.userInfo);
+              this.$router.replace({
+                name: 'userApply'
+              });
+            }
+            if (res.data.data.userType === 'admin') {
+              StorageUtils.set("admin", res.data.data.userInfo);
+              this.$router.replace({
+                name: 'adminReview'
+              });
+            }
+            if (res.data.data.userType === 'police') {
+              StorageUtils.set("police", res.data.data.userInfo);
+              this.$router.replace({
+                name: 'bailerIndex'
+              });
+            }
+          } else {
+            this.$message.error(res.data.msg);
+          }

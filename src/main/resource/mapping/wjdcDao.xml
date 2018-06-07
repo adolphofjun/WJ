@@ -15,6 +15,12 @@
         insert into qu_random_rule_id(belong_rule,qu_bank_id)
         values (#{belong_rule},#{qu_bank_id});
     </insert>
+    <update id="updateRuleState" parameterType="map">
+        update qu_rule set visibility = #{visibility} where id = #{id}
+    </update>
+    <delete id="deleteRuleById" parameterType="java.lang.Integer">
+        delete from qu_rule where id = #{ruleId}
+    </delete>
     <select id="findRule" parameterType="map" resultType="map">
         select  ru.id,ru.name,ru.code,ru.belong_role as roleId,ro.name as roleName,ru.visibility,
             ru.creator,emp.name as creatorName,CONVERT(nvarchar(30), ru.creatorTime, 126)  as creatorTime

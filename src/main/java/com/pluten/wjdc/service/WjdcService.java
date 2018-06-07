@@ -41,4 +41,8 @@ public interface WjdcService {
      * @return
      */
     List<Map> findQuestionOfWj(Integer wjId);
+
+    void updateRuleState(Map rule);
+
+    void deleteRuleById(Integer ruleId);
 }

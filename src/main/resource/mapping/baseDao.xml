@@ -24,6 +24,10 @@
             where 1=1
         </select>
 
+    <update id="updateBankState" parameterType="map">
+        update qu_bank set visibility = #{visibility} where id = #{id}
+    </update>
+
 
 
 </mapper>

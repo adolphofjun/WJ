@@ -52,8 +52,9 @@ public class UserController {
         ResultMsg resultMsg;
         try {
             if(userService.checkUser(user)){
-                request.getSession().setAttribute(Globel.USER_SESSION_KEY, user);
-                resultMsg = ResultUtil.success("登录成功",user);
+                Map user_rt = userService.findUserByCode((String) user.get("code"));
+                request.getSession().setAttribute(Globel.USER_SESSION_KEY, user_rt);
+                resultMsg = ResultUtil.success("登录成功",user_rt);
             }else{
                 resultMsg = ResultUtil.success("账号不存在或密码错误！",user);
             }

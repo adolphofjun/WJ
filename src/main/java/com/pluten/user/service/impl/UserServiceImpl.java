@@ -32,6 +32,10 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    public Map findUserByCode(String userCode) {
+        return userDao.findUserByCode(userCode);
+    }
+
     public boolean checkUser(Map map) {
         Integer is = userDao.checkUser(map);
         if(is!=0) return  true;

@@ -42,6 +42,7 @@ public class WjdcController {
             "}", required = true) Map rule){
         ResultMsg resultMsg;
         try {
+            logger.info("====="+rule.toString());
             wjdcService.saveRule(rule);
             resultMsg = ResultUtil.success("新建规则成功",rule);
         } catch (Exception e) {
@@ -64,6 +65,36 @@ public class WjdcController {
             resultMsg = ResultUtil.systemError();
         }
         return resultMsg;
+    }
+
+    @RequestMapping(value = "updateRuleState",method = RequestMethod.POST)
+    @ApiOperation(value = "修改规则状态", notes = "修改规则状态")
+    @ResponseBody
+    public String updateRuleState(@RequestBody @ApiParam(name = "题库", value = "传入json格式{\"id\":\"1\",\"visibility\":\"1\"}", required = true) Map rule){
+        ResultMsg resultMsg;
+        try {
+            wjdcService.updateRuleState(rule);
+            resultMsg = ResultUtil.success("修改规则状态成功",rule);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return JSON.toJSONString(resultMsg);
+    }
+
+    @RequestMapping(value = "deleteRule/{ruleId}",method = RequestMethod.DELETE)
+    @ApiOperation(value = "删除规则", notes = "删除规则")
+    @ResponseBody
+    public String deleteRule(@PathVariable Integer ruleId){
+        ResultMsg resultMsg;
+        try {
+            wjdcService.deleteRuleById(ruleId);
+            resultMsg = ResultUtil.success("删除规则成功","");
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return JSON.toJSONString(resultMsg);
     }
 
     @RequestMapping(value = "new_wj",method = RequestMethod.POST)

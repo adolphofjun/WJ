@@ -42,6 +42,9 @@
         <select id="findUserById" parameterType="java.lang.Integer" resultType="map">
             select * from sys_emp where id = #{userId}
         </select>
+        <select id="findUserByCode" parameterType="java.lang.String" resultType="map">
+            select * from sys_emp where code = #{userCode}
+        </select>
 
         <select id="findUsersByRoleId" parameterType="java.lang.Integer" resultType="map">
             select * from sys_emp where id = #{userId}

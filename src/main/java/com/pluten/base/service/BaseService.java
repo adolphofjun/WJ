@@ -41,4 +41,6 @@ public interface BaseService {
      * @return
      */
     List<Map> findBankList(Map map);
+
+    void updateBankState(Map map);
 }

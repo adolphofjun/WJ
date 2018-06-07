@@ -11,10 +11,7 @@ import com.alibaba.fastjson.JSON;
 import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,10 +43,26 @@ public class BaseController {
         return JSON.toJSONString(resultMsg);
     }
 
+    @RequestMapping(value = "updateBankState",method = RequestMethod.POST)
+    @ApiOperation(value = "修改题库状态", notes = "修改题库状态")
+    @ResponseBody
+    public String updateBankState(@RequestBody @ApiParam(name = "题库", value = "传入json格式{\"id\":\"1\",\"visibility\":\"1\"}", required = true) Map bank){
+        ResultMsg resultMsg;
+        try {
+            baseService.updateBankState(bank);
+            resultMsg = ResultUtil.success("修改题库状态成功",bank);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return JSON.toJSONString(resultMsg);
+    }
+
+
     @RequestMapping(value = "delete_qu_bank/{bankId}",method = RequestMethod.DELETE)
     @ApiOperation(value = "删除题库", notes = "删除题库")
     @ResponseBody
-    public String delete_qu_bank(@RequestBody  Integer bankId){
+    public String delete_qu_bank(@PathVariable Integer bankId){
         ResultMsg resultMsg;
         try {
                 baseService.deleteBank(bankId);
