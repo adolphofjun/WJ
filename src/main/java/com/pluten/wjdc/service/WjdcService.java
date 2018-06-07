@@ -35,6 +35,8 @@ public interface WjdcService {
      */
     List<Map> findWjTarget(Integer quId);
 
+    void updateWjState(Map map);
+
     /**
      * 获取问卷的题目
      * @param wjId
@@ -45,4 +47,8 @@ public interface WjdcService {
     void updateRuleState(Map rule);
 
     void deleteRuleById(Integer ruleId);
+
+    List<Map> findWj();
+
+    void deleteWjById(Integer wjId);
 }

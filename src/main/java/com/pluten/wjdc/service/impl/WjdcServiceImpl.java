@@ -1,6 +1,6 @@
 package com.pluten.wjdc.service.impl;
 
-import com.pluten.utils.DateUtils;
+import com.pluten.utils.*;
 import com.pluten.wjdc.controller.WjdcController;
 import com.pluten.wjdc.dao.WjdcDao;
 import com.pluten.wjdc.service.WjdcService;
@@ -20,6 +20,7 @@ public class WjdcServiceImpl implements WjdcService {
     private WjdcDao wjdcDao;
 
     public void saveRule(Map rule) {
+        MyUtils.checkArgument(rule,"belong_role");
         if(!rule.containsKey("creator")) rule.put("creator","1");
         rule.put("creatorTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
 
@@ -29,7 +30,8 @@ public class WjdcServiceImpl implements WjdcService {
         must = (List<String>) rule.get("must_bank");
 
         Integer ruleId = wjdcDao.saveRule(rule);
-        ruleId = (Integer) rule.get("id");
+        String id =  rule.get("id")+"";
+        ruleId = Integer.parseInt(id);
         System.out.println("=========="+ruleId);
         for(int i=0; i<random.size(); i++){
             Map temp = new HashMap();
@@ -109,6 +111,7 @@ public class WjdcServiceImpl implements WjdcService {
 
 
     public void newWj(Map map) {
+        MyUtils.checkArgument(map,"rule_id");
         if(!map.containsKey("creator")) map.put("creator","1");
         map.put("creatorTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
         wjdcDao.newWj(map);
@@ -116,6 +119,21 @@ public class WjdcServiceImpl implements WjdcService {
 
     public List<Map> findWjTarget(Integer quId) {
         return wjdcDao.findWjTarget(quId);
+    }
+
+    public void updateWjState(Map map) {
+        Object t = map.get("id");
+        if(null!=t && !"".equals(t+"")){
+            Integer wjId = Integer.parseInt(t+"");
+            if(0==wjdcDao.wjIsCanUpdate(wjId)){
+                wjdcDao.updateWjState(map);
+            }else{
+                throw  new MyException(Constant.STATE_IS_NOT_VARIBALE.getExplanation());
+            }
+        }else{
+            throw  new MyException(Constant.ARGUMENT_EXCEPTION.getExplanation());
+        }
+
     }
 
     public List<Map> findQuestionOfWj(Integer wjId) {
@@ -140,6 +158,18 @@ public class WjdcServiceImpl implements WjdcService {
 
     public void deleteRuleById(Integer ruleId) {
         wjdcDao.deleteRuleById(ruleId);
+    }
+
+    public List<Map> findWj() {
+        return wjdcDao.findWjTitle(null);
+    }
+
+    public void deleteWjById(Integer wjId) {
+        if(0==wjdcDao.wjIsCanUpdate(wjId)){
+            wjdcDao.deleteWjById(wjId);
+        }else{
+            throw  new MyException(Constant.STATE_IS_NOT_VARIBALE.getExplanation());
+        }
     }
 
     /**

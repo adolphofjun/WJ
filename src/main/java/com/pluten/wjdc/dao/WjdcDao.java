@@ -79,6 +79,17 @@ public interface WjdcDao {
      */
     List<Map> findRandomBankIdByWjId(Integer wjId);
 
+    /**
+     * 检查问卷是否可以删除或者改变状态
+     * @param wjId
+     * @return
+     */
+    Integer wjIsCanUpdate(Integer wjId);
+
+    void updateWjState(Map map);
+
+    void deleteWjById(Integer wjId);
+
 
 
 

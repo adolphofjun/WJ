@@ -105,9 +105,11 @@
     </insert>
     <select id="findWjTitle" resultType="map" parameterType="map">
         select qu.id,qu.name,qu.code,qu.visibility,qu.creator as creatorId,emp.name as creatorName,CONVERT(nvarchar(30), qu.creatorTime, 126)  as creatorTime,
-            qu.rule_Id
+            qu.rule_Id,ru.name as ruleName,ro.id as roleId,ro.name as roleName
             from qu_questionnaire qu
             left join sys_emp emp on emp.id = qu.creator
+            left join qu_rule ru on ru.id = qu.rule_id
+            left join sys_role ro on ro.id = ru.belong_role
     </select>
 
     <select id="findWjTarget" resultType="map" parameterType="java.lang.Integer">
@@ -129,6 +131,18 @@
             where  wj.rule_Id = ru.id and randomId.belong_rule = ru.id and randomId.qu_bank_id = qu.bank_id
             and qu.must = 0 and wj.id = #{wjId}
     </select>
+
+    <select id="wjIsCanUpdate" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select isUser from qu_questionnaire where id = #{wjId}
+    </select>
+
+    <update id="updateWjState" parameterType="map">
+        update qu_questionnaire set visibility = #{visibility} where id = #{id}
+    </update>
+
+    <delete id="deleteWjById" parameterType="java.lang.Integer">
+      delete from qu_questionnaire where id = #{wjId}
+    </delete>
 
 
 
