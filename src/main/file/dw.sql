@@ -301,6 +301,15 @@ truncate table qu_select_e
 truncate table qu_select_f
 
 
+truncate table qu_bank;
+truncate table qu_must_rule_id;
+truncate table qu_question;
+truncate table qu_questionnaire;
+truncate table qu_random_rule_id;
+truncate table qu_rule;
+truncate table qu_bank;
+
+
 
   
   

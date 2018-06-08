@@ -137,11 +137,13 @@ public class WjdcServiceImpl implements WjdcService {
     }
 
     public List<Map> findQuestionOfWj(Integer wjId) {
+
+        //
         List<Map> rs = new ArrayList<Map>();
         List<Map> musts = wjdcDao.findMustBankIdByWjId(wjId);
         List<Map> randoms = wjdcDao.findRandomBankIdByWjId(wjId);
 
-        List<Map> randoms_ = getRandom_(randoms);
+        //List<Map> randoms_ = getRandom_(randoms);
 
         for(int i=0; i<musts.size(); i++){
             Map temp = musts.get(i);
@@ -158,6 +160,8 @@ public class WjdcServiceImpl implements WjdcService {
 
     public void deleteRuleById(Integer ruleId) {
         wjdcDao.deleteRuleById(ruleId);
+        wjdcDao.deleteMustBankOfRuleById(ruleId);
+        wjdcDao.deleteRandomBankOfRuleById(ruleId);
     }
 
     public List<Map> findWj() {

@@ -21,6 +21,12 @@
     <delete id="deleteRuleById" parameterType="java.lang.Integer">
         delete from qu_rule where id = #{ruleId}
     </delete>
+    <delete id="deleteMustBankOfRuleById" parameterType="java.lang.Integer">
+        delete from qu_must_rule_id where belong_rule = #{ruleId}
+    </delete>
+    <delete id="deleteRandomBankOfRuleById" parameterType="java.lang.Integer">
+        delete from qu_random_rule_id where belong_rule = #{ruleId}
+    </delete>
     <select id="findRule" parameterType="map" resultType="map">
         select  ru.id,ru.name,ru.code,ru.belong_role as roleId,ro.name as roleName,ru.visibility,
             ru.creator,emp.name as creatorName,CONVERT(nvarchar(30), ru.creatorTime, 126)  as creatorTime

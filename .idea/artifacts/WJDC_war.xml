@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="WJDC:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="WJDC.war">
+      <element id="artifact" artifact-name="WJDC:war exploded" />
+    </root>
+  </artifact>
+</component>

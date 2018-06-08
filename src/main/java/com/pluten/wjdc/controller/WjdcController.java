@@ -158,13 +158,13 @@ public class WjdcController {
     }
 
     @RequestMapping(value = "findWj",method = RequestMethod.GET)
-    @ApiOperation(value = "查询调查问卷试卷", notes = "查询调查问卷试卷")
+    @ApiOperation(value = "查询调查问卷试卷卷头", notes = "查询调查问卷试卷卷头")
     @ResponseBody
     public ResultMsg findWj(){
         ResultMsg resultMsg;
         try {
             List<Map> maps = wjdcService.findWj();
-            resultMsg = ResultUtil.success("查询调查问卷试卷成功",maps);
+            resultMsg = ResultUtil.success("查询调查问卷试卷卷头成功",maps);
         } catch (Exception e) {
             e.printStackTrace();
             resultMsg = ResultUtil.systemError();
@@ -217,7 +217,7 @@ public class WjdcController {
         ResultMsg resultMsg;
         try {
             List<Map> maps = wjdcService.findQuestionOfWj(wjId);
-            resultMsg = ResultUtil.success("获取问卷的所有对象成功",maps);
+            resultMsg = ResultUtil.success("获取问卷下的所有题目",maps);
         } catch (Exception e) {
             e.printStackTrace();
             resultMsg = ResultUtil.systemError();
@@ -275,13 +275,9 @@ public class WjdcController {
         ReadExcel readExcel=new ReadExcel();
         //解析excel，获取客户信息集合。
          List<Map> maps = readExcel.getExcelInfo(name ,file);
-         try {
              wjdcService.saveQuestion(maps);
              b=true;
-         }catch (Exception e){
-             e.printStackTrace();
              b = false;
-         }
         logger.info("文件数据=========="+maps.toString());
         //迭代添加客户信息（注：实际上这里也可以直接将customerList集合作为参数，在Mybatis的相应映射文件中使用foreach标签进行批量添加。）
         return b;

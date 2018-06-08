@@ -13,6 +13,18 @@ public interface WjdcDao {
     void updateRuleState(Map rule);
     void deleteRuleById(Integer ruleId);
 
+    /**
+     * 删除规则对应的必选题题库
+     * @param ruleId
+     */
+    void deleteMustBankOfRuleById(Integer ruleId);
+
+    /**
+     * 删除规则对应的随机题库
+     * @param ruleId
+     */
+    void deleteRandomBankOfRuleById(Integer ruleId);
+
     List<Map> findRule(Map map);
     List<Map> findRuleMust(Integer ruleId);
     List<Map> findRuleRandom(Integer ruleId);
