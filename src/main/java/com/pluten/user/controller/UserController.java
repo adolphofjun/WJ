@@ -2,6 +2,7 @@ package com.pluten.user.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.pluten.user.service.UserService;
+import com.pluten.utils.Constant;
 import com.pluten.utils.Globel;
 import com.pluten.utils.ResultMsg;
 import com.pluten.utils.ResultUtil;
@@ -9,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javafx.scene.chart.ValueAxis;
 import jdk.nashorn.internal.objects.Global;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,7 @@ import java.util.Map;
 @RequestMapping(value = "api/user")
 public class UserController {
 
+    Logger logger = Logger.getLogger("UserController");
     @Autowired
     private UserService userService;
 
@@ -80,6 +83,93 @@ public class UserController {
         return resultMsg;
     }
 
+    @RequestMapping(value = "findAllUser",method = RequestMethod.GET)
+    @ApiOperation(value = "查询员工", notes = "查询员工")
+    @ResponseBody
+    public ResultMsg findAllUser(){
+        ResultMsg resultMsg;
+        try {
+            List<Map> maps = userService.findAllUser(null);
+            resultMsg = ResultUtil.success("查询员工成功",maps);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
+    @RequestMapping(value = "findUserByDeptId/{deptId}",method = RequestMethod.GET)
+    @ApiOperation(value = "根据部门Id查询员工", notes = "根据部门Id查询员工")
+    @ResponseBody
+    public ResultMsg findUserByDeptId(@PathVariable Integer deptId){
+        ResultMsg resultMsg;
+        try {
+
+            List<Map> maps = userService.findUserByDeptId(deptId);
+            resultMsg = ResultUtil.success("根据部门Id查询员工成功",maps);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
+
+    @RequestMapping(value = "findWjOfRole/{roleId}",method = RequestMethod.GET)
+    @ApiOperation(value = "查询角色可查看的问卷", notes = "查询角色可查看的问卷")
+    @ResponseBody
+    public ResultMsg findWjOfRole(@PathVariable Integer roleId){
+        ResultMsg resultMsg;
+        try {
+            List<Map> maps = userService.findWjOfRole(roleId);
+            resultMsg = ResultUtil.success("查询角色可查看的问卷",maps);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
+    @RequestMapping(value = "deleteUser/{userId}",method = RequestMethod.DELETE)
+    @ApiOperation(value = "删除用户", notes = "删除用户")
+    @ResponseBody
+    public String deleteUser(@PathVariable Integer userId){
+        ResultMsg resultMsg;
+        try {
+            userService.deleteUser(userId);
+            //wjdcService.deleteWjById(wjId);
+            resultMsg = ResultUtil.success("删除用户成功","");
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(Constant.STATE_IS_NOT_VARIBALE.getExplanation().equals(e.getMessage())){
+                resultMsg = ResultUtil.success(Constant.STATE_IS_NOT_VARIBALE.getExplanation(),null);
+            }else
+                resultMsg = ResultUtil.systemError();
+        }
+        return JSON.toJSONString(resultMsg);
+    }
+
+
+    @RequestMapping(value = "updateUserState",method = RequestMethod.POST)
+    @ApiOperation(value = "修改用户状态", notes = "修改用户状态")
+    @ResponseBody
+    public String updateWjState(@RequestBody @ApiParam(name = "题库", value = "传入json格式{\"id\":\"1\",\"visibility\":\"1\"}", required = true) Map user){
+        ResultMsg resultMsg;
+        try {
+            userService.updateUserState(user);
+            resultMsg = ResultUtil.success("修改用户状态成功",user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(Constant.ARGUMENT_EXCEPTION.getExplanation().equals(e.getMessage())){
+                resultMsg = ResultUtil.success(Constant.ARGUMENT_EXCEPTION.getExplanation(),user);
+            } else if(Constant.STATE_IS_NOT_VARIBALE.getExplanation().equals(e.getMessage())){
+                resultMsg = ResultUtil.success(Constant.STATE_IS_NOT_VARIBALE.getExplanation(),user);
+            }else
+                resultMsg = ResultUtil.systemError();
+        }
+        return JSON.toJSONString(resultMsg);
+    }
+
     @RequestMapping(value = "register",method = RequestMethod.POST)
     @ApiOperation(value = "注册", notes = "注册")
     @ResponseBody
@@ -91,6 +181,7 @@ public class UserController {
             if(userService.exitUserCode(user)){
                 resultMsg = ResultUtil.success("账号已存在",user);
             }else{
+                logger.info("==========="+user.toString());
                 userService.saveUser(user);
                 resultMsg = ResultUtil.success("注册成功",user);
             }

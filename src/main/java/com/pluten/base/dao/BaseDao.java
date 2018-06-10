@@ -12,7 +12,6 @@ public interface BaseDao {
      * @param map
      */
     void saveBank(Map map);
-
     /**
      * 查询题库
      * @param map
@@ -38,6 +37,7 @@ public interface BaseDao {
      * @param id
      */
     void deleteBank(Integer id);
+    void deleteDept(Integer id);
 
     /**
      * 查询题库
@@ -45,6 +45,19 @@ public interface BaseDao {
      * @return
      */
     List<Map> findBankList(Map map);
-
     void updateBankState(Map map);
+
+    void saveDept(Map map);
+    Integer exitDeptNameOrCode(Map map);
+    List<Map> findDeptList(Map map);
+
+    /**
+     * 查询一个部门下一个角色下的员工
+     * @param map
+     * @return
+     */
+    List<Map> findUserOfRoleAndDept(Map map);
+    void updateDeptState(Map map);
+    Integer isCanChangeBankState(Integer bankId);
+    Integer isCanChangeDeptState(Integer deptId);
 }

@@ -109,7 +109,8 @@ public class WjdcController {
             "\t\"code\": \"问卷编码\",\n" +
             "\t\"rule_id\": \"1\",\n" +
             "\t\"creator\": \"1\",\n" +
-            "\t\"visibility\": \"0\"\n" +
+            "\t\"visibility\": \"0\",\n" +
+            "\t\"roleIds\":[\"1\", \"2\"]\n" +
             "}", required = true) Map wj){
         ResultMsg resultMsg;
         try {

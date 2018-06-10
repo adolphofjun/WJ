@@ -105,10 +105,16 @@
         select a.id,a.title as title,a.score as score,a.name as name from qu_select_f a where a.belong_qu = #{questionId}
     </select>
 
-    <insert id="newWj" parameterType="map">
+    <insert id="newWj" parameterType="map" useGeneratedKeys="true" keyProperty="id">
         insert into qu_questionnaire (name,code,visibility,rule_id,creator,creatorTime)
         values(#{name},#{code},#{visibility},#{rule_id},#{creator},#{creatorTime})
     </insert>
+    <!--保存问卷对应的可查看角色-->
+    <insert id="saveQuestionnaireForRole" parameterType="map">
+        insert into qu_questionnaire_role (role_id,questionnaire_id)
+        values(#{roleId},#{questionnaireId})
+    </insert>
+    <!--查询问卷头信息-->
     <select id="findWjTitle" resultType="map" parameterType="map">
         select qu.id,qu.name,qu.code,qu.visibility,qu.creator as creatorId,emp.name as creatorName,CONVERT(nvarchar(30), qu.creatorTime, 126)  as creatorTime,
             qu.rule_Id,ru.name as ruleName,ro.id as roleId,ro.name as roleName

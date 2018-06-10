@@ -62,6 +62,7 @@ public interface WjdcDao {
      * @param map
      */
     void newWj(Map map);
+    void saveQuestionnaireForRole(Map map);
 
     /**
      * 查询问卷卷头信息

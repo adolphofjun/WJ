@@ -206,6 +206,18 @@ qu_id varchar(1000),--问卷对应的题目ID
 rule_id init
 )
 
+
+ --可查看问卷的角色
+if(Exists(select * from sys.sysobjects where id=OBJECT_ID('qu_questionnaire_role')))
+	print '数据库表名已经存在'
+else
+  CREATE TABLE qu_questionnaire_role
+(
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
+role_id int,
+questionnaire_id int,
+)
+
  --员工接受到的问卷表
 if(Exists(select * from sys.sysobjects where id=OBJECT_ID('sys_emp_qu'))) 
   print '该数据库表已经存在' 
@@ -286,6 +298,22 @@ else
 id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 userId int,
 roleId int,
+creator int,
+creatorTime datetime,
+mender int,--修改者
+menderTime  datetime,
+)
+
+
+ --部门信息表
+if(Exists(select * from sys.sysobjects where id=OBJECT_ID('sys_dept')))
+  print '该数据库表已经存在'
+else
+ CREATE TABLE sys_dept
+(
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
+name varchar(255),
+code varchar(255),
 creator int,
 creatorTime datetime,
 mender int,--修改者

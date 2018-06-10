@@ -13,8 +13,20 @@
             where name = #{name,jdbcType=VARCHAR} or code = #{code,jdbcType=VARCHAR}
        </select>
 
+        <insert id="saveDept" parameterType="map">
+              insert into sys_dept(name,code,visibility,creator,creatorTime)
+              values (#{name},#{code},#{visibility},#{creator},#{creatorTime});
+          </insert>
+        <select id="exitDeptNameOrCode" resultType="java.lang.Integer" parameterType="map">
+                select count(1)
+                from sys_dept
+                where name = #{name,jdbcType=VARCHAR} or code = #{code,jdbcType=VARCHAR}
+           </select>
         <delete id="deleteBank" parameterType="java.lang.Integer">
             delete from qu_bank where id = #{id}
+        </delete>
+        <delete id="deleteDept" parameterType="java.lang.Integer">
+            delete from sys_dept where id = #{id}
         </delete>
 
         <select id="findBankList" resultType="map" parameterType="map">
@@ -23,11 +35,39 @@
             from qu_bank b
             where 1=1
         </select>
+        <select id="findDeptList" resultType="map" parameterType="map">
+           select
+                d.id,d.name,d.code,d.visibility,d.creator,CONVERT(nvarchar(30), d.creatorTime, 126)  as creatorTime
+            from sys_dept d
+            where 1=1
+        </select>
+        <!--判断部门状态是否可以改变-->
+        <select id="isCanChangeDeptState" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+           select
+                d.isUser
+            from sys_dept d
+            where 1=1 and d.id = #{deptId}
+        </select>
 
-    <update id="updateBankState" parameterType="map">
-        update qu_bank set visibility = #{visibility} where id = #{id}
-    </update>
+        <!--判断题库状态是否可以改变-->
+        <select id="isCanChangeBankState" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+           select
+                d.isUser
+            from qu_bank d
+            where 1=1 and d.id = #{bankId}
+        </select>
 
-
+        <!--查询一个部门下一个角色下的员工-->
+        <select id="findUserOfRoleAndDept" resultType="map" parameterType="map">
+            select emp.id as userId,emp.name,emp.code
+                from sys_emp emp,sys_user_role ur,sys_role ro
+                where emp.id = ur.userId and ur.roleId = ro.id and  ro.id = #{roleId} and emp.deptId = #{deptId}
+       </select>
+        <update id="updateBankState" parameterType="map">
+            update qu_bank set visibility = #{visibility} where id = #{id}
+        </update>
+        <update id="updateDeptState" parameterType="map">
+            update sys_dept set visibility = #{visibility} where id = #{id}
+        </update>
 
 </mapper>

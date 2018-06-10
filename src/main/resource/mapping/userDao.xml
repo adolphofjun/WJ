@@ -3,7 +3,40 @@
 <mapper namespace="com.pluten.user.dao.UserDao" >
 
 
-      <insert id="saveRole" parameterType="map">
+    <resultMap type="map" id="empMap">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="pwd" property="pwd"/>
+        <result column="deptId" property="deptId"/>
+        <result column="deptName" property="deptName"/>
+        <result column="visibility" property="visibility"/>
+        <result column="creator" property="creator"/>
+        <result column="creatorTime" property="creatorTime"/>
+        <collection property="roleNames" ofType="map" select="getRoleName" column="id">
+        </collection>
+    </resultMap>
+
+    <select id="findAllUser" parameterType="map" resultMap="empMap">
+        SELECT
+            emp.id,emp.name,emp.code,emp.pwd,emp.deptId,dept.name as deptName,
+            emp.visibility,emp.creator,CONVERT(nvarchar(30), emp.creatorTime, 126) as creatorTime
+        from sys_emp emp
+        left join sys_dept dept on dept.id = emp.deptId
+        where 1=1
+        <if test="deptId!=null">
+            and emp.deptId = #{deptId}
+        </if>
+    </select>
+
+    <select id="getRoleName" parameterType="int" resultType="map">
+       select ur.userId,ro.id as roleId,ro.name  as roleName
+            from sys_role ro,sys_user_role ur
+            where ro.id  = ur.roleId and ur.userId = #{id}
+    </select>
+
+
+    <insert id="saveRole" parameterType="map">
           insert into sys_role(name,code,power,orginId,userType,creator,creatorTime)
           values (#{name},#{code},#{power},#{orginId},#{userType},#{creator},#{creatorTime});
       </insert>
@@ -54,6 +87,25 @@
             insert into sys_user_role(userId,roleId,creator,creatorTime)
             values (#{userId},#{roleId},#{creator},#{creatorTime});
         </insert>
+        <select id="findWjOfRole" resultType="map" parameterType="java.lang.Integer">
+            select qu.id,qu.name,qu.code,qu.visibility,qu.creator as creatorId,emp.name as creatorName,CONVERT(nvarchar(30), qu.creatorTime, 126)  as creatorTime,
+                qu.rule_Id,ru.name as ruleName,ro.id as roleId,ro.name as roleName
+                from qu_questionnaire qu
+                left join sys_emp emp on emp.id = qu.creator
+                left join qu_rule ru on ru.id = qu.rule_id
+                left join sys_role ro on ro.id = ru.belong_role
+                where ro.id = #{roleId} and qu.visibility = 1
+        </select>
+        <delete id="deleteUser" parameterType="java.lang.Integer">
+            delete from sys_emp where id = #{userId}
+        </delete>
+         <delete id="deleteUserLinkRole" parameterType="java.lang.Integer">
+            delete from sys_user_role where userId = #{userId}
+        </delete>
+
+        <update id="updateUserState" parameterType="map">
+            update sys_emp set visibility = #{visibility} where  id = #{id}
+        </update>
 
 
 </mapper>

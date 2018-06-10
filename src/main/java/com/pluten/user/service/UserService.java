@@ -19,7 +19,9 @@ public interface UserService {
     void saveRole(Map map);
     boolean exitRoleNameOrCode(Map bank);
     Map findUser(Map map);
+    List<Map> findAllUser(Map map);
     Map findUserByCode(String userCode);
+    List<Map> findUserByDeptId(Integer deptId);
 
     /**
      * 登录检查用户名和密码
@@ -31,7 +33,7 @@ public interface UserService {
     boolean exitUserCode(Map user);
 
     void deleteUser(Integer id);
-
+    void updateUserState(Map map);
     void updateUser(Map map);
 
 
@@ -43,4 +45,7 @@ public interface UserService {
      * @return
      */
     void impower(Map map);
+
+    List<Map> findWjOfRole(Integer roleId);
+
 }

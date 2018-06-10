@@ -6,6 +6,7 @@ import com.pluten.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,11 +30,21 @@ public class UserServiceImpl implements UserService {
     }
 
     public Map findUser(Map map) {
-        return null;
+        return userDao.findUser(map);
+    }
+
+    public List<Map> findAllUser(Map map) {
+        return userDao.findAllUser(map);
     }
 
     public Map findUserByCode(String userCode) {
         return userDao.findUserByCode(userCode);
+    }
+
+    public List<Map> findUserByDeptId(Integer deptId) {
+        Map map = new HashMap();
+        map.put("deptId",deptId);
+        return userDao.findAllUser(map);
     }
 
     public boolean checkUser(Map map) {
@@ -53,7 +64,12 @@ public class UserServiceImpl implements UserService {
     }
 
     public void deleteUser(Integer id) {
+        userDao.deleteUser(id);
+        userDao.deleteUserLinkRole(id);
+    }
 
+    public void updateUserState(Map map) {
+        userDao.updateUserState(map);
     }
 
     public void updateUser(Map map) {
@@ -64,6 +80,10 @@ public class UserServiceImpl implements UserService {
         if(!map.containsKey("creator")) map.put("creator","1");
         map.put("creatorTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
          userDao.impower(map);
+    }
+
+    public List<Map> findWjOfRole(Integer roleId) {
+        return userDao.findWjOfRole(roleId);
     }
 
     public void addUser(Map map) {

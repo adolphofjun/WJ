@@ -114,7 +114,22 @@ public class WjdcServiceImpl implements WjdcService {
         MyUtils.checkArgument(map,"rule_id");
         if(!map.containsKey("creator")) map.put("creator","1");
         map.put("creatorTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
+        List roleIds = (List) map.get("roleIds");
         wjdcDao.newWj(map);
+        Object ob = map.get("id");
+        Integer questionId = Integer.parseInt(ob.toString());
+        saveQuForRole(roleIds,questionId);
+        //logger.info("roles==========="+roleIds.toString());
+
+    }
+    private void saveQuForRole(List roleIds, int id) {
+        for(int i=0; i<roleIds.size(); i++){
+            Integer temp = Integer.parseInt(roleIds.get(i)+"");
+            Map map = new HashMap();
+            map.put("roleId",temp);
+            map.put("questionnaireId",id);
+            wjdcDao.saveQuestionnaireForRole(map);
+        }
     }
 
     public List<Map> findWjTarget(Integer quId) {
