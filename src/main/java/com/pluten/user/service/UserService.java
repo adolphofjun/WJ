@@ -22,6 +22,7 @@ public interface UserService {
     List<Map> findAllUser(Map map);
     Map findUserByCode(String userCode);
     List<Map> findUserByDeptId(Integer deptId);
+    List<Map> findUserByDeptCode(String deptCode);
 
     /**
      * 登录检查用户名和密码

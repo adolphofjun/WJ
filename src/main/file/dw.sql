@@ -325,6 +325,7 @@ id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255),
 code varchar(255),
 isUser int,
+visibility int,
 creator int,
 creatorTime datetime,
 mender int,--修改者

@@ -114,6 +114,21 @@ public class UserController {
         return resultMsg;
     }
 
+    @RequestMapping(value = "findUserByDeptCode/{deptCode}",method = RequestMethod.GET)
+    @ApiOperation(value = "根据部门Code查询员工", notes = "根据部门Code查询员工")
+    @ResponseBody
+    public ResultMsg findUserByDeptCode(@PathVariable String deptCode){
+        ResultMsg resultMsg;
+        try {
+            List<Map> maps = userService.findUserByDeptCode(deptCode);
+            resultMsg = ResultUtil.success("根据部门Code查询员工成功",maps);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
 
     @RequestMapping(value = "findWjOfRole/{roleId}",method = RequestMethod.GET)
     @ApiOperation(value = "查询角色可查看的问卷", notes = "查询角色可查看的问卷")
@@ -183,7 +198,7 @@ public class UserController {
                 resultMsg = ResultUtil.success("账号已存在",user);
             }else{
                 logger.info("==========="+user.toString());
-                //userService.saveUser(user);
+                userService.saveUser(user);
                 resultMsg = ResultUtil.success("注册成功",user);
             }
         } catch (Exception e) {

@@ -38,12 +38,21 @@ public class UserServiceImpl implements UserService {
     }
 
     public Map findUserByCode(String userCode) {
-        return userDao.findUserByCode(userCode);
+        Map map = new HashMap();
+        map.put("code",userCode);
+        List<Map> maps = userDao.findAllUser(map);
+        return maps.get(0);
     }
 
     public List<Map> findUserByDeptId(Integer deptId) {
         Map map = new HashMap();
         map.put("deptId",deptId);
+        return userDao.findAllUser(map);
+    }
+
+    public List<Map> findUserByDeptCode(String deptCode) {
+        Map map = new HashMap();
+        map.put("deptCode",deptCode);
         return userDao.findAllUser(map);
     }
 

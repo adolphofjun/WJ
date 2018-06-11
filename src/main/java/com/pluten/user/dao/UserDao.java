@@ -27,16 +27,12 @@ public interface UserDao {
      * @return
      */
     Integer checkUser(Map map);
-    Map findUserByCode(String userCode);
     void saveUser(Map user);
     Integer exitUserCode(Map user);
     void deleteUser(Integer userId);
     void deleteUserLinkRole(Integer userId);
     void updateUser(Map map);
     void updateUserState(Map map);
-    Map findUserById(Integer userId);
-
-    List<Map> findUserByDeptId(Integer deptId);
 
     /**
      * 授权

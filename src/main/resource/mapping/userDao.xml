@@ -31,6 +31,9 @@
         <if test="deptId!=null">
             and emp.deptId = #{deptId}
         </if>
+        <if test="deptCode!=null">
+            and dept.code = #{deptCode}
+        </if>
     </select>
 
     <select id="getRoleName" parameterType="int" resultType="map">
@@ -75,13 +78,6 @@
             insert into sys_emp(name,code,pwd,sex,address,idCard,email,education,school,orginId,deptId,creator,creatorTime)
             values (#{name},#{code},#{pwd},#{sex},#{address},#{idCard},#{email},#{education},#{school},#{orginId},#{deptId},#{creator},#{creatorTime});
         </insert>
-
-        <select id="findUserById" parameterType="java.lang.Integer" resultType="map">
-            select * from sys_emp where id = #{userId}
-        </select>
-        <select id="findUserByCode" parameterType="java.lang.String" resultType="map">
-            select * from sys_emp where code = #{userCode}
-        </select>
 
         <select id="findUsersByRoleId" parameterType="java.lang.Integer" resultType="map">
             select * from sys_emp where id = #{userId}
