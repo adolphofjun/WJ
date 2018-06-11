@@ -9,5 +9,8 @@
         <module name="WJDC" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="WJDC" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>
