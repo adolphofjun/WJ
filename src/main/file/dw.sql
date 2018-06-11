@@ -8,6 +8,7 @@ id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255) NOT NULL,
 code varchar(255),
 type int,--题库类型
+isUser int,
 visibility int ,--是否可用
 creator int,
 creatorTime datetime
@@ -199,11 +200,12 @@ name varchar(255) NOT NULL,
 code varchar(255),
 visibility int ,--是否可用
 creator int,
+isUser int,
 creatorTime datetime,
 mender int,--修改者
 menderTime  datetime,
 qu_id varchar(1000),--问卷对应的题目ID
-rule_id init
+rule_id int
 )
 
 
@@ -262,10 +264,18 @@ id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255),
 code varchar(255),
 pwd  varchar(255),
+sex int,
+phone varchar(20),
+address varchar(255),
+idCard varchar(20),
+email varchar(255),
+education varchar(255),
+school varchar(255),
 orginId int,
 deptId int,
 creator int,
 userType int,
+visibility int,
 creatorTime datetime,
 mender int,--修改者
 menderTime  datetime,
@@ -314,6 +324,7 @@ else
 id int NOT NULL PRIMARY KEY IDENTITY(1,1),
 name varchar(255),
 code varchar(255),
+isUser int,
 creator int,
 creatorTime datetime,
 mender int,--修改者

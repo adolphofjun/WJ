@@ -175,14 +175,15 @@ public class UserController {
     @ResponseBody
     public String register(@RequestBody @ApiParam(name = "注册",
             value = "传入json格式{\"name\":\"张三\",\"code\":\"zs\",\"pwd\":\"123\",\"orginId\":\"1\"," +
-                    "\"deptId\":\"1\"}", required = true) Map user){
+                    "\"deptId\":\"1\",\"sex\":\"1\",\"address\":\"zs\",\"idCard\":\"123\",\"email\":\"1\",\" +\n" +
+                    "\"education\":\"1\",\"school\":\"1\"}", required = true) Map user){
         ResultMsg resultMsg;
         try {
             if(userService.exitUserCode(user)){
                 resultMsg = ResultUtil.success("账号已存在",user);
             }else{
                 logger.info("==========="+user.toString());
-                userService.saveUser(user);
+                //userService.saveUser(user);
                 resultMsg = ResultUtil.success("注册成功",user);
             }
         } catch (Exception e) {

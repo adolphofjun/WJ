@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.pluten.user.dao.UserDao" >
-
-
     <resultMap type="map" id="empMap">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
@@ -11,6 +9,12 @@
         <result column="deptId" property="deptId"/>
         <result column="deptName" property="deptName"/>
         <result column="visibility" property="visibility"/>
+        <result column="sex" property="sex"/>
+        <result column="address" property="address"/>
+        <result column="idCard" property="idCard"/>
+        <result column="email" property="email"/>
+        <result column="education" property="education"/>
+        <result column="school" property="school"/>
         <result column="creator" property="creator"/>
         <result column="creatorTime" property="creatorTime"/>
         <collection property="roleNames" ofType="map" select="getRoleName" column="id">
@@ -19,7 +23,7 @@
 
     <select id="findAllUser" parameterType="map" resultMap="empMap">
         SELECT
-            emp.id,emp.name,emp.code,emp.pwd,emp.deptId,dept.name as deptName,
+            emp.id,emp.name,emp.code,emp.pwd,emp.sex,emp.address,emp.idCard,emp.email,emp.education,emp.school,emp.deptId,dept.name as deptName,
             emp.visibility,emp.creator,CONVERT(nvarchar(30), emp.creatorTime, 126) as creatorTime
         from sys_emp emp
         left join sys_dept dept on dept.id = emp.deptId
@@ -68,8 +72,8 @@
             where code = #{code,jdbcType=VARCHAR}
         </select>
         <insert id="saveUser" parameterType="map">
-            insert into sys_emp(name,code,pwd,orginId,deptId,creator,creatorTime)
-            values (#{name},#{code},#{pwd},#{orginId},#{deptId},#{creator},#{creatorTime});
+            insert into sys_emp(name,code,pwd,sex,address,idCard,email,education,school,orginId,deptId,creator,creatorTime)
+            values (#{name},#{code},#{pwd},#{sex},#{address},#{idCard},#{email},#{education},#{school},#{orginId},#{deptId},#{creator},#{creatorTime});
         </insert>
 
         <select id="findUserById" parameterType="java.lang.Integer" resultType="map">
