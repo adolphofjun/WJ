@@ -75,8 +75,8 @@
             where code = #{code,jdbcType=VARCHAR}
         </select>
         <insert id="saveUser" parameterType="map">
-            insert into sys_emp(name,code,pwd,sex,address,idCard,email,education,school,orginId,deptId,creator,creatorTime)
-            values (#{name},#{code},#{pwd},#{sex},#{address},#{idCard},#{email},#{education},#{school},#{orginId},#{deptId},#{creator},#{creatorTime});
+            insert into sys_emp(name,code,pwd,sex,address,idCard,email,visibility,education,school,orginId,deptId,creator,creatorTime)
+            values (#{name},#{code},#{pwd},#{sex},#{address},#{idCard},#{email},#{visibility},#{education},#{school},#{orginId},#{deptId},#{creator},#{creatorTime});
         </insert>
 
         <select id="findUsersByRoleId" parameterType="java.lang.Integer" resultType="map">

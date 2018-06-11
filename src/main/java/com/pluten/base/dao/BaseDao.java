@@ -50,6 +50,7 @@ public interface BaseDao {
     void saveDept(Map map);
     Integer exitDeptNameOrCode(Map map);
     List<Map> findDeptList(Map map);
+    Integer finddeptIdByCode(String code);
 
     /**
      * 查询一个部门下一个角色下的员工

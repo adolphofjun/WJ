@@ -41,6 +41,9 @@
             from sys_dept d
             where 1=1
         </select>
+        <select id="finddeptIdByCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+          SELECT id from sys_dept where code = #{code}
+        </select>
         <!--判断部门状态是否可以改变-->
         <select id="isCanChangeDeptState" resultType="java.lang.Integer" parameterType="java.lang.Integer">
            select
