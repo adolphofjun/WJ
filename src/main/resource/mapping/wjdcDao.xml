@@ -155,6 +155,44 @@
     <delete id="deleteWjById" parameterType="java.lang.Integer">
       delete from qu_questionnaire where id = #{wjId}
     </delete>
+    <!--保存员工接受过的问卷表头信息-->
+    <insert id="saveEmpWjTitle" parameterType="map">
+        insert into sys_emp_qu_title(qu_id,an_time,score,creator,creatorTime,targetId,answerId)
+        values(#{quId},#{an_time},#{score},#{creator},#{creatorTime},#{targetId},#{answerId});
+    </insert>
+    <!--保存员工接受过的问卷信息-->
+    <insert id="saveEmpWj" parameterType="map">
+        insert into sys_emp_qu(qu_id,an_time,score,creator,creatorTime,targetId,answerId)
+        values(#{quId},#{an_time},#{score},#{creator},#{creatorTime},#{targetId},#{answerId});
+    </insert>
+    <!--查询某一个人的问卷结果-->
+    <select id="findResultByTargetId" parameterType="map" resultType="map">
+        select seq.score,emp.id as targetId, emp.name as targetName ,
+            ans.id as ansId,ans.name as ansName,seq.qu_id as quId,qu.name as quName
+            from sys_emp_qu seq
+            left join sys_emp emp on emp.id = seq.targetId
+            left join sys_emp ans on ans.id = seq.answerId
+            left join qu_questionnaire qu on qu.id = seq.qu_id
+            where  seq.targetId = #{targetId} and seq.qu_id = #{quId}
+            order by seq.score
+    </select>
+    <!--查询某一个人的卷头信息-->
+    <select id="findResultTile" parameterType="map" resultType="map">
+        select seq.score,emp.id as targetId, emp.name as targetName ,
+            ans.id as ansId,ans.name as ansName,seq.qu_id as quId,qu.name as quName
+            from sys_emp_qu_title seq
+            left join sys_emp emp on emp.id = seq.targetId
+            left join sys_emp ans on ans.id = seq.answerId
+            left join qu_questionnaire qu on qu.id = seq.qu_id
+            where  seq.targetId = #{targetId} and seq.qu_id = #{quId}
+            order by seq.creatorTime desc
+    </select>
+    <!--查询某一个人的问卷所有分数-->
+    <select id="findScoreById" parameterType="map" resultType="Float">
+        select score from sys_emp_qu qu
+            where qu.qu_id = 1 and qu.targetId = 1
+            order by score
+    </select>
 
 
 

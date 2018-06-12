@@ -40,6 +40,7 @@ public interface UserDao {
      * @return
      */
     void impower(Map map);
-
     List<Map> findWjOfRole(Integer roleId);
+
+
 }

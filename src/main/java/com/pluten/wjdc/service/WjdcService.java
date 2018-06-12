@@ -48,7 +48,33 @@ public interface WjdcService {
 
     void deleteRuleById(Integer ruleId);
 
+    /**
+     * 保存答卷后提交的问卷
+     * @param map
+     */
+    void saveAnswerWj(Map map);
+
     List<Map> findWj();
 
     void deleteWjById(Integer wjId);
+
+    /**
+     * 保存员工接受过的问卷
+     * @param map
+     */
+    void saveEmpWj(Map map);
+
+    /**
+     * 问卷id:quId  目标员工Id  targetId
+     * 保存员工接受过的问卷头信息
+     * @param map
+     */
+    void CountWj(Map map);
+
+    /**
+     * 查询某一个人的卷头信息
+     * @param map  quId   targetId
+     * @return
+     */
+    List<Map> findResultTile(Map map);
 }

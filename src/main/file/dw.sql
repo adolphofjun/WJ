@@ -231,12 +231,33 @@ qu_id int ,--对应的问卷
 score float,
 must_score float,
 random_score int,
+targetId int,
+answerId int,
 an_time datetime,
 creator int,
 creatorTime datetime,
 mender int,--修改者
 menderTime  datetime,
 qu_type int--问卷类型
+)
+
+ /*--员工接受到的问卷表表头*/
+if(Exists(select * from sys.sysobjects where id=OBJECT_ID('sys_emp_qu_title')))
+  print '该数据库表已经存在'
+else
+ CREATE TABLE sys_emp_qu_title
+(
+id int NOT NULL PRIMARY KEY IDENTITY(1,1),
+qu_id int ,/*--//对应的问卷*/
+targetId int,
+answerId int,
+score float,/*最终分*/
+an_time datetime,
+creator int,
+creatorTime datetime,
+mender int,/*--修改者*/
+menderTime  datetime,
+qu_type int/*--问卷类型*/
 )
 
 
@@ -348,6 +369,9 @@ truncate table qu_questionnaire;
 truncate table qu_random_rule_id;
 truncate table qu_rule;
 truncate table qu_bank;
+
+truncate table sys_emp;
+truncate table sys_user_role;
 
 
 

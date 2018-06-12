@@ -134,7 +134,11 @@ public class WjdcController {
     public ResultMsg submit_wj(@RequestBody  Map wj){
         ResultMsg resultMsg;
         try {
-           logger.info("====="+wj.toString());
+            logger.info("====="+wj.toString());
+          /* logger.info("====="+wj.get("data"));
+            logger.info("====="+wj.get("userId"));
+            logger.info("====="+wj.get("targetId"));*/
+            wjdcService.saveEmpWj(wj);
             resultMsg = ResultUtil.success("提交成功",wj);
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,8 +153,9 @@ public class WjdcController {
     public ResultMsg findWjTarget(@PathVariable Integer quId){
         ResultMsg resultMsg;
         try {
-            List<Map> maps = wjdcService.findWjTarget(quId);
-            resultMsg = ResultUtil.success("获取问卷的所有对象成功",maps);
+            logger.info("========="+quId);
+            //List<Map> maps = wjdcService.findWjTarget(quId);
+            resultMsg = ResultUtil.success("获取问卷的所有对象成功",null);
         } catch (Exception e) {
             e.printStackTrace();
             resultMsg = ResultUtil.systemError();

@@ -104,8 +104,8 @@ public class UserController {
     public ResultMsg findUserByDeptId(@PathVariable Integer deptId){
         ResultMsg resultMsg;
         try {
-
             List<Map> maps = userService.findUserByDeptId(deptId);
+            logger.info("根据部门Id查询员工=========="+maps.toString());
             resultMsg = ResultUtil.success("根据部门Id查询员工成功",maps);
         } catch (Exception e) {
             e.printStackTrace();

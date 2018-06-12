@@ -13,6 +13,7 @@
         <result column="address" property="address"/>
         <result column="idCard" property="idCard"/>
         <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
         <result column="education" property="education"/>
         <result column="school" property="school"/>
         <result column="creator" property="creator"/>
@@ -23,7 +24,7 @@
 
     <select id="findAllUser" parameterType="map" resultMap="empMap">
         SELECT
-            emp.id,emp.name,emp.code,emp.pwd,emp.sex,emp.address,emp.idCard,emp.email,emp.education,emp.school,emp.deptId,dept.name as deptName,
+            emp.id,emp.name,emp.code,emp.pwd,emp.sex,emp.address,emp.idCard,emp.email,emp.education,emp.school,emp.phone,emp.deptId,dept.name as deptName,
             emp.visibility,emp.creator,CONVERT(nvarchar(30), emp.creatorTime, 126) as creatorTime
         from sys_emp emp
         left join sys_dept dept on dept.id = emp.deptId
@@ -75,8 +76,8 @@
             where code = #{code,jdbcType=VARCHAR}
         </select>
         <insert id="saveUser" parameterType="map">
-            insert into sys_emp(name,code,pwd,sex,address,idCard,email,visibility,education,school,orginId,deptId,creator,creatorTime)
-            values (#{name},#{code},#{pwd},#{sex},#{address},#{idCard},#{email},#{visibility},#{education},#{school},#{orginId},#{deptId},#{creator},#{creatorTime});
+            insert into sys_emp(name,code,pwd,sex,address,idCard,email,visibility,education,school,phone,orginId,deptId,creator,creatorTime)
+            values (#{name},#{code},#{pwd},#{sex},#{address},#{idCard},#{email},#{visibility},#{education},#{school},#{phone},#{orginId},#{deptId},#{creator},#{creatorTime});
         </insert>
 
         <select id="findUsersByRoleId" parameterType="java.lang.Integer" resultType="map">
@@ -106,6 +107,7 @@
         <update id="updateUserState" parameterType="map">
             update sys_emp set visibility = #{visibility} where  id = #{id}
         </update>
+
 
 
 </mapper>

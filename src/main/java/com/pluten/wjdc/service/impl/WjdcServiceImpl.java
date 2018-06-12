@@ -4,6 +4,7 @@ import com.pluten.utils.*;
 import com.pluten.wjdc.controller.WjdcController;
 import com.pluten.wjdc.dao.WjdcDao;
 import com.pluten.wjdc.service.WjdcService;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -179,6 +180,15 @@ public class WjdcServiceImpl implements WjdcService {
         wjdcDao.deleteRandomBankOfRuleById(ruleId);
     }
 
+    public void saveAnswerWj(Map map) {
+        //[{select=A, quId=2, score=2}, {select=A, quId=3, score=5}]
+        List list = (List) map.get("data");
+        String userId = (String) map.get("userId");
+        String quId = (String) map.get("quId");
+        String targetId = (String) map.get("targetId");
+        getSumScore(list);
+    }
+
     public List<Map> findWj() {
         return wjdcDao.findWjTitle(null);
     }
@@ -189,6 +199,45 @@ public class WjdcServiceImpl implements WjdcService {
         }else{
             throw  new MyException(Constant.STATE_IS_NOT_VARIBALE.getExplanation());
         }
+    }
+
+    public void saveEmpWj(Map map) {
+        //qu_id,an_time,score,creator,creatorTime,targetId
+        List list = (List) map.get("data");
+        String userId =  map.get("userId")+"";
+        String quId =  map.get("quId")+"";
+        String targetId =  map.get("targetId")+"";
+        Map temp = new HashMap();
+        temp.put("quId",quId);
+        temp.put("answerId",userId);
+        temp.put("score",getSumScore(list));
+        temp.put("creatorTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
+        temp.put("creator",userId);
+        temp.put("creatorTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
+        temp.put("targetId",targetId);
+        wjdcDao.saveEmpWj(temp);
+    }
+
+    public void CountWj(Map map) {
+        List<Float> arrs = wjdcDao.findScoreById(map);
+        Float sum = 0f;
+        for(int i=1; i<arrs.size()-1; i++){
+            sum+= arrs.get(i);
+        }
+        Map temp = new HashMap();
+        temp.put("quId",map.get("targetId"));
+        temp.put("score",sum);
+        temp.put("creatorTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
+        temp.put("creator",map.get("creator"));
+        temp.put("creatorTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
+        temp.put("targetId",map.get("targetId"));
+        wjdcDao.saveEmpWjTitle(temp);
+
+
+    }
+
+    public List<Map> findResultTile(Map map) {
+        return null;
     }
 
     /**
@@ -224,6 +273,24 @@ public class WjdcServiceImpl implements WjdcService {
             if(i==69)wjdcDao.saveSelectE(selectMap);
             if(i==70)wjdcDao.saveSelectF(selectMap);
         }
+    }
+
+    public Float getSumScore(List list){
+        Float sum = 0f;
+        //[{select=A, quId=2, score=2}, {select=A, quId=3, score=5}]
+        for(int i=0; i<list.size(); i++){
+            Map temp = (Map) list.get(i);
+            String score =  temp.get("score")+"";
+            String quId =  temp.get("quId")+"";
+            String select =  temp.get("select")+"";
+            if(StringUtils.isNotEmpty(score)){
+                Float s = Float.parseFloat(score);
+                sum+= s;
+            }else{
+                throw  new MyException(Constant.ARGUMENT_EXCEPTION.getExplanation());
+            }
+        }
+        return  sum;
     }
 
 

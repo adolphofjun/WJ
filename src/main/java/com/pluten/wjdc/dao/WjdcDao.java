@@ -103,6 +103,29 @@ public interface WjdcDao {
 
     void deleteWjById(Integer wjId);
 
+    /**
+     * 保存员工接受过的问卷
+     * @param map
+     */
+    void saveEmpWj(Map map);
+    void saveEmpWjTitle(Map map);
+
+    /**
+     *  <查询某一个人的问卷结果的所有结果
+     * @param map
+     * @return
+     */
+    List<Map> findResultByTargetId(Map map);
+
+    /**
+     * 查询某一个人的卷头信息
+     * @param map  quId   targetId
+     * @return
+     */
+    List<Map> findResultTile(Map map);
+
+    List<Float> findScoreById(Map map);
+
 
 
 
