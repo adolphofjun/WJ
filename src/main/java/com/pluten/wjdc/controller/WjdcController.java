@@ -44,7 +44,7 @@ public class WjdcController {
         ResultMsg resultMsg;
         try {
             logger.info("====="+rule.toString());
-            wjdcService.saveRule(rule);
+            //wjdcService.saveRule(rule);
             resultMsg = ResultUtil.success("新建规则成功",rule);
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,6 +177,37 @@ public class WjdcController {
         }
         return resultMsg;
     }
+
+    @RequestMapping(value = "findResultTitle",method = RequestMethod.POST)
+    @ApiOperation(value = "查询结果卷头", notes = "查询结果卷头")
+    @ResponseBody
+    public ResultMsg findResultTitle(@RequestBody @ApiParam(name = "查询问卷结果", value = "传入json格式{\"quId\":\"1\",\"targetId\":\"1\"}", required = true) Map wj){
+        ResultMsg resultMsg;
+        try {
+            List<Map> maps = wjdcService.findResultTile(wj);
+            resultMsg = ResultUtil.success("查询结果卷头成功",maps);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
+    @RequestMapping(value = "countWjResult",method = RequestMethod.POST)
+    @ApiOperation(value = "统计问卷结果", notes = "统计问卷结果")
+    @ResponseBody
+    public ResultMsg countWjResult(@RequestBody @ApiParam(name = "统计问卷结果", value = "传入json格式{\"quId\":\"1\",\"targetId\":\"1\"}", required = true) Map wj){
+        ResultMsg resultMsg;
+        try {
+            wjdcService.CountWj(wj);
+            resultMsg = ResultUtil.success("统计问卷结果成功",wj);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
 
     @RequestMapping(value = "updateWjState",method = RequestMethod.POST)
     @ApiOperation(value = "修改问卷状态", notes = "修改问卷状态")
