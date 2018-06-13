@@ -24,12 +24,11 @@ public class WjdcServiceImpl implements WjdcService {
         MyUtils.checkArgument(rule,"belong_role");
         if(!rule.containsKey("creator")) rule.put("creator","1");
         rule.put("creatorTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
-
-        List<String> random = null;
-        List<String> must = null;
-        random = (List<String>) rule.get("random_bank");
-        must = (List<String>) rule.get("must_bank");
-
+        Map map = (Map) rule.get("bankInfo");
+        List<Map> random = null;
+        List<Map> must = null;
+        random = (List<Map>) map.get("must");
+        must = (List<Map>) map.get("random");
         Integer ruleId = wjdcDao.saveRule(rule);
         String id =  rule.get("id")+"";
         ruleId = Integer.parseInt(id);
@@ -37,23 +36,28 @@ public class WjdcServiceImpl implements WjdcService {
         for(int i=0; i<random.size(); i++){
             Map temp = new HashMap();
             temp.put("belong_rule",ruleId);
-            temp.put("qu_bank_id",random.get(i));
+            temp.put("qu_bank_id",random.get(i).get("id"));
+            temp.put("per",random.get(i).get("per"));
             wjdcDao.saveRuleRandom(temp);
         }
         for(int i=0; i<must.size(); i++){
             Map temp = new HashMap();
             temp.put("belong_rule",ruleId);
-            temp.put("qu_bank_id",must.get(i));
+            temp.put("qu_bank_id",must.get(i).get("id"));
+            temp.put("per",must.get(i).get("per"));
             wjdcDao.saveRuleMust(temp);
         }
     }
 
     public List<Map> findRule(Map map) {
+        if(map==null) map = new HashMap();
+        map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
         List<Map> rs = new ArrayList<Map>();
         List<Map> rules = wjdcDao.findRule(map);
         for(int i=0; i<rules.size(); i++){
             Map rule = rules.get(i);
-            Integer ruleId = (Integer) rule.get("id");
+            Object obj = rule.get("id");;
+            Integer ruleId = Integer.parseInt(obj.toString());
             List<Map> mustBank = wjdcDao.findRuleMust(ruleId);
             List<Map> randomBank = wjdcDao.findRuleRandom(ruleId);
             rule.put("mustBank",mustBank);
@@ -85,14 +89,44 @@ public class WjdcServiceImpl implements WjdcService {
         List<Map> temps = wjdcDao.findQuestion(map);
         for(int i=0; i<temps.size(); i++){
             Map temp = temps.get(i);
-            Integer questionId = (Integer) temp.get("id");
+            //获取题目Id
+
+            Object obj = temp.get("id");
+            Integer questionId = Integer.parseInt(obj.toString());
             getQuestionSelect(temp,questionId);
             rs.add(temp);
         }
         return rs;
     }
 
+    public List<Map> findQuestionByBankId(Integer bankId) {
+        Map map = new HashMap();
+        map.put("bankId",bankId);
+        List<Map> rs = new ArrayList<Map>();
+        List<Map> temps = wjdcDao.findQuestion(map);
+        for(int i=0; i<temps.size(); i++){
+            Map temp = temps.get(i);
+            //获取题目Id
+            Object obj = temp.get("id");
+            Integer questionId = Integer.parseInt(obj.toString());
+            getQuestionSelect(temp,questionId);
+            rs.add(temp);
+        }
+        return rs;
+    }
+
+    /**
+     * 获取题目对应的选项
+     * @param temp
+     * @param questionId
+     */
     private void getQuestionSelect(Map temp, Integer questionId) {
+        String must = temp.get("must")+"";
+        if("1".endsWith(must)){
+            String qu = temp.get("name")+"";
+            qu = "(必选题)"+qu;
+            temp.put("name",qu);
+        }
         Map tempA = wjdcDao.findSelectA(questionId);
         Map tempB = wjdcDao.findSelectB(questionId);
         Map tempC = wjdcDao.findSelectC(questionId);
