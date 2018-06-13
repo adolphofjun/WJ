@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -45,5 +47,13 @@ public class TestClass {
     public String t(){
         System.out.println("===login=k");
         return  "index";
+    }
+
+    public static void main(String[] str){
+        //1528917756000
+        //Date date = new Date("1528917756000");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//这个是你要转成后的时间的格式
+        String sd = sdf.format(new Date(Long.parseLong(String.valueOf("1528917756000"))));
+        System.out.println("======"+sd);
     }
 }

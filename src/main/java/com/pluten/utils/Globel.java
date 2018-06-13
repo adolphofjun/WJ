@@ -10,4 +10,8 @@ public class Globel {
      */
     public static String ARGUMENT_EXCEPTION = "参数异常";
 
+    public static String SQL_TYPE_VLUE = "1";
+    public static String SQL_TYPE_KEY = "SQL_TYPE_KEY";
+
+
 }

@@ -31,13 +31,13 @@
 
         <select id="findBankList" resultType="map" parameterType="map">
            select
-                b.id,b.name,b.code,b.type, b.visibility,b.creator,CONVERT(nvarchar(30), b.creatorTime, 126)  as creatorTime
+                b.id,b.name,b.code,b.type, 0 as per, b.visibility,b.creator, b.creatorTime
             from qu_bank b
             where 1=1
         </select>
         <select id="findDeptList" resultType="map" parameterType="map">
            select
-                d.id,d.name,d.code,d.visibility,d.creator,CONVERT(nvarchar(30), d.creatorTime, 126)  as creatorTime
+                d.id,d.name,d.code,d.visibility,d.creator, d.creatorTime
             from sys_dept d
             where 1=1
         </select>

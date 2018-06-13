@@ -25,7 +25,7 @@
     <select id="findAllUser" parameterType="map" resultMap="empMap">
         SELECT
             emp.id,emp.name,emp.code,emp.pwd,emp.sex,emp.address,emp.idCard,emp.email,emp.education,emp.school,emp.phone,emp.deptId,dept.name as deptName,
-            emp.visibility,emp.creator,CONVERT(nvarchar(30), emp.creatorTime, 126) as creatorTime
+            emp.visibility,emp.creator, emp.creatorTime
         from sys_emp emp
         left join sys_dept dept on dept.id = emp.deptId
         where 1=1
@@ -54,7 +54,7 @@
 
         <select id="findRoleList" resultType="map" parameterType="map">
            select
-                r.id,r.name,r.code,r.power,r.orginId,r.userType,r.creator,CONVERT(nvarchar(30), r.creatorTime, 126)  as creatorTime
+                r.id,r.name,r.code,r.power,r.orginId,r.userType,r.creator,r.creatorTime
             from sys_role r
             where 1=1
         </select>
@@ -89,7 +89,7 @@
             values (#{userId},#{roleId},#{creator},#{creatorTime});
         </insert>
         <select id="findWjOfRole" resultType="map" parameterType="java.lang.Integer">
-            select qu.id,qu.name,qu.code,qu.visibility,qu.creator as creatorId,emp.name as creatorName,CONVERT(nvarchar(30), qu.creatorTime, 126)  as creatorTime,
+            select qu.id,qu.name,qu.code,qu.visibility,qu.creator as creatorId,emp.name as creatorName, qu.creatorTime,
                 qu.rule_Id,ru.name as ruleName,ro.id as roleId,ro.name as roleName
                 from qu_questionnaire qu
                 left join sys_emp emp on emp.id = qu.creator

@@ -151,6 +151,22 @@ title varchar(255),
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ /*--问卷表表头*/
+CREATE TABLE IF NOT EXISTS `sys_emp_qu_title`(
+   id INT UNSIGNED AUTO_INCREMENT,
+qu_id int ,/*--//对应的问卷*/
+targetId int,
+answerId int,
+score float,/*最终分*/
+an_time datetime,
+creator int,
+creatorTime datetime,
+mender int,/*--修改者*/
+menderTime  datetime,
+qu_type int,/*--问卷类型*/
+   PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
  /*--问卷表*/
 CREATE TABLE IF NOT EXISTS `qu_questionnaire`(
@@ -270,3 +286,12 @@ mender int,/*--修改者*/
 menderTime  datetime,
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*20180613*/
+alter table qu_questionnaire  add num int;
+alter table qu_random_rule_id  add per float;
+alter table qu_must_rule_id  add per float;
+alter table qu_rule  add num int;
+alter table sys_emp_qu  add targetId int;
+alter table sys_emp_qu  add answerId int;

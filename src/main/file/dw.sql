@@ -373,6 +373,12 @@ truncate table qu_bank;
 truncate table sys_emp;
 truncate table sys_user_role;
 
+/*20180613*/
+alter table qu_questionnaire  add num int;
+alter table qu_random_rule_id  add per float;
+alter table qu_must_rule_id  add per float;
+alter table qu_rule  add num int;
+
 
 
   

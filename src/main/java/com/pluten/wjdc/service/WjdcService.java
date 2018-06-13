@@ -25,7 +25,20 @@ public interface WjdcService {
      * @return
      */
     Integer saveQuestionSelect(Map map);
+
+    /**
+     * 查询所有的题目
+     * @param map
+     * @return
+     */
     List<Map> findQuestion(Map map);
+
+    /**
+     * bankId
+     * @param bankId
+     * @return
+     */
+    List<Map> findQuestionByBankId(Integer bankId);
 
     void newWj(Map map);
     /**

@@ -3,17 +3,17 @@
 <mapper namespace="com.pluten.wjdc.dao.WjdcDao" >
 
     <insert id="saveRule" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
-        insert into qu_rule(name,code,belong_role,visibility,creator,creatorTime)
-        values (#{name},#{code},#{belong_role},#{visibility},#{creator},#{creatorTime});
+        insert into qu_rule(name,code,belong_role,visibility,num,creator,creatorTime)
+        values (#{name},#{code},#{belong_role},#{visibility},#{num},#{creator},#{creatorTime});
      </insert>
 
     <insert id="saveRuleMust" parameterType="map">
-        insert into qu_must_rule_id(belong_rule,qu_bank_id)
-        values (#{belong_rule},#{qu_bank_id});
+        insert into qu_must_rule_id(belong_rule,qu_bank_id,per)
+        values (#{belong_rule},#{qu_bank_id},#{per});
     </insert>
     <insert id="saveRuleRandom" parameterType="map">
-        insert into qu_random_rule_id(belong_rule,qu_bank_id)
-        values (#{belong_rule},#{qu_bank_id});
+        insert into qu_random_rule_id(belong_rule,qu_bank_id,per)
+        values (#{belong_rule},#{qu_bank_id},#{per});
     </insert>
     <update id="updateRuleState" parameterType="map">
         update qu_rule set visibility = #{visibility} where id = #{id}
@@ -28,19 +28,30 @@
         delete from qu_random_rule_id where belong_rule = #{ruleId}
     </delete>
     <select id="findRule" parameterType="map" resultType="map">
-        select  ru.id,ru.name,ru.code,ru.belong_role as roleId,ro.name as roleName,ru.visibility,
-            ru.creator,emp.name as creatorName,CONVERT(nvarchar(30), ru.creatorTime, 126)  as creatorTime
-        from qu_rule ru
-        left join sys_emp emp on emp.id = ru.creator
-        left join sys_role ro on ro.id = ru.belong_role
+      <if test="SQL_TYPE_KEY == 1">
+          select  ru.id,ru.name,ru.code,ru.belong_role as roleId,ro.name as roleName,ru.visibility,ru.num,
+          ru.creator,emp.name as creatorName,   FROM_UNIXTIME(ru.creatorTime ) as  creatorTime
+          from qu_rule ru
+          left join sys_emp emp on emp.id = ru.creator
+          left join sys_role ro on ro.id = ru.belong_role
+      </if>
+        <if test="sqlType == 1">
+            select  ru.id,ru.name,ru.code,ru.belong_role as roleId,ro.name as roleName,ru.visibility,ru.num,
+            ru.creator,emp.name as creatorName, ru.creatorTime
+            from qu_rule ru
+            left join sys_emp emp on emp.id = ru.creator
+            left join sys_role ro on ro.id = ru.belong_role
+        </if>
+
+
     </select>
     <select id="findRuleMust" resultType="map" parameterType="java.lang.Integer">
-         select ru.id,bank.id as bankId,bank.name from qu_must_rule_id ru
+         select ru.id,bank.id as bankId,bank.name,ru.per from qu_must_rule_id ru
             left join qu_bank bank on bank.id = ru.qu_bank_id
             where ru.belong_rule = #{ruleId}
     </select>
     <select id="findRuleRandom" resultType="map" parameterType="java.lang.Integer">
-         select ru.id,bank.id as bankId,bank.name from qu_random_rule_id ru
+         select ru.id,bank.id as bankId,bank.name,ru.per from qu_random_rule_id ru
             left join qu_bank bank on bank.id = ru.qu_bank_id
             where ru.belong_rule = #{ruleId}
     </select>
@@ -84,6 +95,10 @@
         from qu_question qu
         left join qu_bank bank on bank.id = qu.bank_id
         left join sys_emp emp on emp.id = qu.creator
+        where 1=1
+        <if test="bankId!=null">
+            and qu.bank_id = #{bankId}
+        </if>
     </select>
 
     <select id="findSelectA" resultType="map" parameterType="java.lang.Integer">
@@ -116,7 +131,7 @@
     </insert>
     <!--查询问卷头信息-->
     <select id="findWjTitle" resultType="map" parameterType="map">
-        select qu.id,qu.name,qu.code,qu.visibility,qu.creator as creatorId,emp.name as creatorName,CONVERT(nvarchar(30), qu.creatorTime, 126)  as creatorTime,
+        select qu.id,qu.name,qu.code,qu.visibility,qu.creator as creatorId,emp.name as creatorName, qu.creatorTime,
             qu.rule_Id,ru.name as ruleName,ro.id as roleId,ro.name as roleName
             from qu_questionnaire qu
             left join sys_emp emp on emp.id = qu.creator

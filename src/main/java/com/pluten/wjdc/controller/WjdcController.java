@@ -44,7 +44,7 @@ public class WjdcController {
         ResultMsg resultMsg;
         try {
             logger.info("====="+rule.toString());
-            //wjdcService.saveRule(rule);
+            wjdcService.saveRule(rule);
             resultMsg = ResultUtil.success("新建规则成功",rule);
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,6 +64,21 @@ public class WjdcController {
         try {
             List<Map> maps = wjdcService.findRule(null);
             resultMsg = ResultUtil.success("查询规则成功",maps);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
+    @RequestMapping(value = "findQuestionByBanId/{bankId}",method = RequestMethod.GET)
+    @ApiOperation(value = "获取题库对应的题目", notes = "获取题库对应的题目")
+    @ResponseBody
+    public ResultMsg findQuestionByBanId(@PathVariable Integer bankId){
+        ResultMsg resultMsg;
+        try {
+            List<Map> maps = wjdcService.findQuestionByBankId(bankId);
+            resultMsg = ResultUtil.success("获取题库对应的题目成功",maps);
         } catch (Exception e) {
             e.printStackTrace();
             resultMsg = ResultUtil.systemError();
