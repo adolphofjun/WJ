@@ -288,6 +288,98 @@ menderTime  datetime,
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+/*20180614问卷头*/
+CREATE TABLE IF NOT EXISTS `wj_title`(
+   id INT UNSIGNED AUTO_INCREMENT,
+nane int,
+code VARCHAR(100),
+isUser int,
+visibility int,
+ruleName VARCHAR(100),
+quType int,
+isMust int,
+creator int,
+creatorTime datetime,
+mender int,/*--修改者*/
+menderTime  datetime,
+   PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*20180614--选项A表*/
+CREATE TABLE IF NOT EXISTS `wj_select_A`(
+   id INT UNSIGNED AUTO_INCREMENT,
+name varchar(255),
+code varchar(255),
+score float,
+belong_wj int,
+belong_qu int,
+title varchar(255),
+   PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ /*20180614--选项B表*/
+CREATE TABLE IF NOT EXISTS `wj_select_B`(
+   id INT UNSIGNED AUTO_INCREMENT,
+name varchar(255),
+code varchar(255),
+score float,
+belong_wj int,
+belong_qu int,
+title varchar(255),
+   PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ /*20180614--选项C表*/
+CREATE TABLE IF NOT EXISTS `wj_select_C`(
+   id INT UNSIGNED AUTO_INCREMENT,
+name varchar(255),
+code varchar(255),
+score float,
+belong_wj int,
+belong_qu int,
+title varchar(255),
+   PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ /*20180614--选项D表*/
+CREATE TABLE IF NOT EXISTS `wj_select_D`(
+   id INT UNSIGNED AUTO_INCREMENT,
+name varchar(255),
+code varchar(255),
+score float,
+belong_wj int,
+belong_qu int,
+title varchar(255),
+   PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ /*20180614--选项E表*/
+CREATE TABLE IF NOT EXISTS `wj_select_E`(
+   id INT UNSIGNED AUTO_INCREMENT,
+name varchar(255),
+code varchar(255),
+score float,
+belong_wj int,
+belong_qu int,
+title varchar(255),
+   PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ /*20180614--选项F表*/
+CREATE TABLE IF NOT EXISTS `wj_select_F`(
+   id INT UNSIGNED AUTO_INCREMENT,
+name varchar(255),
+code varchar(255),
+score float,
+belong_wj int,
+belong_qu int,
+title varchar(255),
+   PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*20180614*/
+alter table wj_title add ruleId int
+
+
 /*20180613*/
 alter table qu_questionnaire  add num int;
 alter table qu_random_rule_id  add per float;

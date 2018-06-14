@@ -56,6 +56,12 @@ public interface WjdcDao {
     Map findSelectF(Integer questionId);
     Map findSelectG(Integer questionId);
 
+    /**
+     *
+     * @param map  state  quId
+     */
+    void updateQuestState(Map map);
+
 
     /**
      * 新建问卷
@@ -79,14 +85,14 @@ public interface WjdcDao {
     List<Map> findWjTarget(Integer quId);
 
     /**
-     * 根据问卷Id获取到该问卷中的必选题题库下的题目
+     * 根据问卷Id获取到该问卷中的必选题题库
      * @param wjId
      * @return
      */
     List<Map> findMustBankIdByWjId(Integer wjId);
 
     /**
-     * 据问卷Id获取到该问卷中的随机题题库下的题目
+     * 据问卷Id获取到该问卷中的随机题题库
      * @param wjId
      * @return
      */
@@ -111,7 +117,7 @@ public interface WjdcDao {
     void saveEmpWjTitle(Map map);
 
     /**
-     *  <查询某一个人的问卷结果的所有结果
+     *  查询某一个人的问卷结果的所有结果
      * @param map
      * @return
      */

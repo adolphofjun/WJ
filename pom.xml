@@ -40,6 +40,11 @@
       <version>${spring.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.junit4</groupId>
+      <artifactId>org.junit4</artifactId>
+      <version>4.12</version>
+    </dependency>
 
     <!-- springMVC核心包 -->
     <dependency>
@@ -399,7 +404,6 @@
       <artifactId>mysql-connector-java</artifactId>
       <version>8.0.8-dmr</version>
     </dependency>
-
   </dependencies>
 
   <build>

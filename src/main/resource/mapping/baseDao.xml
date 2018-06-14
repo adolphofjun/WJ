@@ -30,16 +30,32 @@
         </delete>
 
         <select id="findBankList" resultType="map" parameterType="map">
-           select
-                b.id,b.name,b.code,b.type, 0 as per, b.visibility,b.creator, b.creatorTime
-            from qu_bank b
-            where 1=1
+            <if test="SQL_TYPE_KEY == 1">
+                select
+                b.id,b.name,b.code,b.type, 0 as per, b.visibility,b.creator,  date_format(b.creatorTime,'%Y-%m-%d')as  creatorTime
+                from qu_bank b
+                where 1=1
+            </if>
+            <if test="SQL_TYPE_KEY == 2">
+                select
+                b.id,b.name,b.code,b.type, 0 as per, b.visibility,b.creator,  CONVERT(varchar, b.creatorTime, 120 ) as creatorTime
+                from qu_bank b
+                where 1=1
+            </if>
         </select>
         <select id="findDeptList" resultType="map" parameterType="map">
-           select
-                d.id,d.name,d.code,d.visibility,d.creator, d.creatorTime
-            from sys_dept d
-            where 1=1
+            <if test="SQL_TYPE_KEY == 1">
+                select
+                d.id,d.name,d.code,d.visibility,d.creator, date_format(d.creatorTime,'%Y-%m-%d')as  creatorTime
+                from sys_dept d
+                where 1=1
+            </if>
+            <if test="SQL_TYPE_KEY == 2">
+                select
+                d.id,d.name,d.code,d.visibility,d.creator, CONVERT(varchar, d.creatorTime, 120 ) as creatorTime
+                from sys_dept d
+                where 1=1
+            </if>
         </select>
         <select id="finddeptIdByCode" parameterType="java.lang.String" resultType="java.lang.Integer">
           SELECT id from sys_dept where code = #{code}

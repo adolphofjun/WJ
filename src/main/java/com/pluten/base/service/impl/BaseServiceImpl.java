@@ -4,6 +4,7 @@ import com.pluten.base.dao.BaseDao;
 import com.pluten.base.service.BaseService;
 import com.pluten.utils.Constant;
 import com.pluten.utils.DateUtils;
+import com.pluten.utils.Globel;
 import com.pluten.utils.MyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ public class BaseServiceImpl implements BaseService {
     }
 
     public List<Map> findBank(Map map) {
+        if(map==null) map = new HashMap();
+        map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
         return null;
     }
 
@@ -55,6 +58,8 @@ public class BaseServiceImpl implements BaseService {
     }
 
     public List<Map> findBankList(Map map) {
+        if(map==null) map = new HashMap();
+        map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
         return baseDao.findBankList(map);
     }
 
@@ -84,21 +89,29 @@ public class BaseServiceImpl implements BaseService {
     }
 
     public List<Map> findDeptList(Map map) {
+        if(map==null) map = new HashMap();
+        map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
         return baseDao.findDeptList(map);
     }
 
     public List<Map> findUserOfRoleAndDept(Map map) {
+        if(map==null) map = new HashMap();
+        map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
         return baseDao.findUserOfRoleAndDept(map);
     }
 
     public List<Map> findUserOfRoleAndDept(Integer deptId, Integer roleId) {
         Map map = new HashMap();
+        if(map==null) map = new HashMap();
+        map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
         map.put("deptId",deptId);
         map.put("roleId",roleId);
         return baseDao.findUserOfRoleAndDept(map);
     }
 
     public void updateDeptState(Map map) {
+        if(map==null) map = new HashMap();
+        map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
         String deptId = (String) map.get("id");
         if(null == deptId || "".equals(deptId)){
             throw  new MyException(Constant.ARGUMENT_EXCEPTION.getExplanation());

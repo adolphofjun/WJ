@@ -21,6 +21,9 @@ public class WjdcServiceImpl implements WjdcService {
     private WjdcDao wjdcDao;
 
     public void saveRule(Map rule) {
+        //name=规则2, code=gz2, belong_role=1, visibility=1, bankInfo={must=[{id=1, per=20}, {id=2, per=30}], random=[{id=1, per=20}, {id=2, per=30}]}, num=10}
+        if(rule==null) rule = new HashMap();
+        rule.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
         MyUtils.checkArgument(rule,"belong_role");
         if(!rule.containsKey("creator")) rule.put("creator","1");
         rule.put("creatorTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
@@ -32,12 +35,14 @@ public class WjdcServiceImpl implements WjdcService {
         Integer ruleId = wjdcDao.saveRule(rule);
         String id =  rule.get("id")+"";
         ruleId = Integer.parseInt(id);
+
         System.out.println("=========="+ruleId);
         for(int i=0; i<random.size(); i++){
             Map temp = new HashMap();
             temp.put("belong_rule",ruleId);
             temp.put("qu_bank_id",random.get(i).get("id"));
             temp.put("per",random.get(i).get("per"));
+            //savePrepareWj(ruleId,rule,temp);
             wjdcDao.saveRuleRandom(temp);
         }
         for(int i=0; i<must.size(); i++){
@@ -48,6 +53,8 @@ public class WjdcServiceImpl implements WjdcService {
             wjdcDao.saveRuleMust(temp);
         }
     }
+
+
 
     public List<Map> findRule(Map map) {
         if(map==null) map = new HashMap();
@@ -85,12 +92,13 @@ public class WjdcServiceImpl implements WjdcService {
     }
 
     public List<Map> findQuestion(Map map) {
+        if(map==null) map = new HashMap();
+        map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
         List<Map> rs = new ArrayList<Map>();
         List<Map> temps = wjdcDao.findQuestion(map);
         for(int i=0; i<temps.size(); i++){
             Map temp = temps.get(i);
             //获取题目Id
-
             Object obj = temp.get("id");
             Integer questionId = Integer.parseInt(obj.toString());
             getQuestionSelect(temp,questionId);
@@ -103,6 +111,7 @@ public class WjdcServiceImpl implements WjdcService {
         Map map = new HashMap();
         map.put("bankId",bankId);
         List<Map> rs = new ArrayList<Map>();
+        map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
         List<Map> temps = wjdcDao.findQuestion(map);
         for(int i=0; i<temps.size(); i++){
             Map temp = temps.get(i);
@@ -117,7 +126,7 @@ public class WjdcServiceImpl implements WjdcService {
 
     /**
      * 获取题目对应的选项
-     * @param temp
+     * @param temp  题目头
      * @param questionId
      */
     private void getQuestionSelect(Map temp, Integer questionId) {
@@ -186,22 +195,63 @@ public class WjdcServiceImpl implements WjdcService {
 
     }
 
-    public List<Map> findQuestionOfWj(Integer wjId) {
+    public List<Map> findQuestionOfWj(Integer wjId,Integer QuNum) throws Exception {
 
         //
         List<Map> rs = new ArrayList<Map>();
         List<Map> musts = wjdcDao.findMustBankIdByWjId(wjId);
         List<Map> randoms = wjdcDao.findRandomBankIdByWjId(wjId);
-
-        //List<Map> randoms_ = getRandom_(randoms);
-
-        for(int i=0; i<musts.size(); i++){
-            Map temp = musts.get(i);
-            Integer questionId = (Integer) temp.get("id");
-            getQuestionSelect(temp,questionId);
-            rs.add(temp);
-        }
+        getQuestUtil(rs,musts,1,QuNum);//获取必选题
+        getQuestUtil(rs,randoms,0,QuNum);//获取随机体
         return rs;
+    }
+
+    private void getQuestUtil(List<Map> rs, List<Map> maps, int type,int QuNum) throws  Exception {
+        int lackNum = 0;//必选题中缺少数量
+        for(int i=0; i<maps.size(); i++){
+            Map temp = maps.get(i);
+            Integer bankId = (Integer) temp.get("bankId");
+            //对应题库下所有的随机选题
+            List<Map> quests = findQuestTitleByBankId(bankId,type);
+            Float per = (Float) temp.get("per");
+            float tp =  (per/100f);
+            int quNum = (int)(QuNum * tp);//需求数量
+            int mustNum = quests.size();//题库数量
+            //如果题库中的题目小于等于需求的题目数
+            int startMax = 0;//随机起点最大值
+            int start = 0;
+            if(mustNum<=quNum) {
+                //rs.addAll(quests);
+                lackNum = quNum-mustNum;
+                //将必选题加入列表
+                for(int j=0; j<mustNum; j++){
+                    Map tempQu = quests.get(j);
+                    Object obj = tempQu.get("id");
+                    Integer questionId = Integer.parseInt(obj.toString());
+                    getQuestionSelect(tempQu,questionId);
+                    rs.add(quests.get(j));
+                }
+            }else{
+                startMax = mustNum - quNum;
+                start = MyUtils.getRandom(startMax);
+                //将必选题加入列表
+                for(int j=start; j<start+quNum; j++){
+                    Map tempQu = quests.get(j);
+                    Object obj = tempQu.get("id");
+                    Integer questionId = Integer.parseInt(obj.toString());
+                    getQuestionSelect(tempQu,questionId);
+                    rs.add(quests.get(j));
+                }
+            }
+
+
+        }
+       /* if(lackNum!=0 && type==1) throw  new MyException("题库中必选题数量不够");
+        else if(lackNum!=0 && type==0)throw  new MyException("题库中随机题数量不够");*/
+    }
+
+    public void updateQuestState(Map map) {
+        wjdcDao.updateQuestState(map);
     }
 
     public void updateRuleState(Map rule) {
@@ -327,12 +377,32 @@ public class WjdcServiceImpl implements WjdcService {
         return  sum;
     }
 
+    /**
+     * 查询指定题库下必选题和随机题和所有题
+     * @param bankId
+     * @param type  0 随机题  1 必选题   2所有题
+     * @return
+     */
+    public List<Map> findQuestTitleByBankId(Integer bankId,Integer type){
+        Map map = new HashMap();
+        map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
+        map.put("bankId",bankId);
+        if(type==0){
+            map.put("must",0);
+        }else if(type==1){
+            map.put("must",1);
+        }else{
+            map.put("must",null);
+        }
+        return wjdcDao.findQuestion(map);
+    }
+
+
+
 
     public static void main(String[] str){
-        for(int i=65; i<65+5; i++){
-            char tp = (char) i;
-            System.out.println("==="+tp);
-
-        }
+        Random ra =new Random();
+        for (int i=0;i<30;i++)
+        {System.out.println(MyUtils.getRandom(1));}
     }
 }

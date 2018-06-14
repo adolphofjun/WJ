@@ -28,22 +28,20 @@
         delete from qu_random_rule_id where belong_rule = #{ruleId}
     </delete>
     <select id="findRule" parameterType="map" resultType="map">
-      <if test="SQL_TYPE_KEY == 1">
+      <if test="SQL_TYPE_KEY==1">
           select  ru.id,ru.name,ru.code,ru.belong_role as roleId,ro.name as roleName,ru.visibility,ru.num,
-          ru.creator,emp.name as creatorName,   FROM_UNIXTIME(ru.creatorTime ) as  creatorTime
+          ru.creator,emp.name as creatorName, date_format(ru.creatorTime,'%Y-%m-%d') as  creatorTime
           from qu_rule ru
           left join sys_emp emp on emp.id = ru.creator
           left join sys_role ro on ro.id = ru.belong_role
       </if>
-        <if test="sqlType == 1">
+        <if test="SQL_TYPE_KEY==2">
             select  ru.id,ru.name,ru.code,ru.belong_role as roleId,ro.name as roleName,ru.visibility,ru.num,
-            ru.creator,emp.name as creatorName, ru.creatorTime
+            ru.creator,emp.name as creatorName, CONVERT(varchar, ru.creatorTime, 120 ) as creatorTime
             from qu_rule ru
             left join sys_emp emp on emp.id = ru.creator
             left join sys_role ro on ro.id = ru.belong_role
         </if>
-
-
     </select>
     <select id="findRuleMust" resultType="map" parameterType="java.lang.Integer">
          select ru.id,bank.id as bankId,bank.name,ru.per from qu_must_rule_id ru
@@ -88,16 +86,37 @@
     </insert>
 
     <select id="findQuestion" parameterType="map" resultType="map">
-        select qu.id,qu.name,qu.code,qu.type_id,
+        <if test="SQL_TYPE_KEY == 1">
+            select qu.id,qu.name,qu.code,qu.type_id,
             qu.must,qu.bank_id,bank.name as bankName,qu.visibility,
             qu.isDelete,qu.keyWord,qu.creator,emp.name as creatorName,
-            qu.creatorTime
-        from qu_question qu
-        left join qu_bank bank on bank.id = qu.bank_id
-        left join sys_emp emp on emp.id = qu.creator
-        where 1=1
-        <if test="bankId!=null">
-            and qu.bank_id = #{bankId}
+            date_format(qu.creatorTime,'%Y-%m-%d')as  creatorTime
+            from qu_question qu
+            left join qu_bank bank on bank.id = qu.bank_id
+            left join sys_emp emp on emp.id = qu.creator
+            where 1=1
+            <if test="bankId!=null">
+                and qu.bank_id = #{bankId}
+            </if>
+            <if test="must!=null">
+                and qu.must = #{must}
+            </if>
+        </if>
+        <if test="SQL_TYPE_KEY == 2">
+            select qu.id,qu.name,qu.code,qu.type_id,
+            qu.must,qu.bank_id,bank.name as bankName,qu.visibility,
+            qu.isDelete,qu.keyWord,qu.creator,emp.name as creatorName,
+            CONVERT(varchar, qu.creatorTime, 120 ) as creatorTime
+            from qu_question qu
+            left join qu_bank bank on bank.id = qu.bank_id
+            left join sys_emp emp on emp.id = qu.creator
+            where 1=1
+            <if test="bankId!=null">
+                and qu.bank_id = #{bankId}
+            </if>
+            <if test="must!=null">
+                and qu.must = #{must}
+            </if>
         </if>
     </select>
 
@@ -119,6 +138,10 @@
     <select id="findSelectF" resultType="map" parameterType="java.lang.Integer">
         select a.id,a.title as title,a.score as score,a.name as name from qu_select_f a where a.belong_qu = #{questionId}
     </select>
+
+    <update id="updateQuestState" parameterType="map">
+        update qu_question set must = #{state} where id = #{quId}
+    </update>
 
     <insert id="newWj" parameterType="map" useGeneratedKeys="true" keyProperty="id">
         insert into qu_questionnaire (name,code,visibility,rule_id,creator,creatorTime)
@@ -146,17 +169,15 @@
     </select>
 
     <select id="findMustBankIdByWjId" resultType="map" parameterType="java.lang.Integer">
-          select qu.id,qu.name
-            from qu_questionnaire wj,qu_rule ru,qu_must_rule_id mustId,qu_question qu
-            where wj.rule_Id = ru.id and mustId.belong_rule = ru.id and mustId.qu_bank_id = qu.bank_id
-            and qu.must = 1 and wj.id = #{wjId}
+            select mustId.id,mustId.belong_rule as ruleId,mustId.qu_bank_id as bankId, mustId.per
+            from qu_questionnaire wj,qu_must_rule_id mustId
+            where wj.rule_Id = mustId.belong_rule  and wj.id = #{wjId}
     </select>
 
     <select id="findRandomBankIdByWjId" resultType="map" parameterType="java.lang.Integer">
-          select qu.id,qu.name
-            from qu_questionnaire wj, qu_rule ru, qu_random_rule_id randomId, qu_question qu
-            where  wj.rule_Id = ru.id and randomId.belong_rule = ru.id and randomId.qu_bank_id = qu.bank_id
-            and qu.must = 0 and wj.id = #{wjId}
+            select randomId.id,randomId.belong_rule as ruleId,randomId.qu_bank_id as bankId, randomId.per
+            from qu_questionnaire wj,qu_random_rule_id randomId
+            where wj.rule_Id = randomId.belong_rule and  wj.id = #{wjId}
     </select>
 
     <select id="wjIsCanUpdate" parameterType="java.lang.Integer" resultType="java.lang.Integer">

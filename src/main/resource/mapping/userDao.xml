@@ -23,17 +23,33 @@
     </resultMap>
 
     <select id="findAllUser" parameterType="map" resultMap="empMap">
-        SELECT
+        <if test="SQL_TYPE_KEY == 1">
+            SELECT
             emp.id,emp.name,emp.code,emp.pwd,emp.sex,emp.address,emp.idCard,emp.email,emp.education,emp.school,emp.phone,emp.deptId,dept.name as deptName,
-            emp.visibility,emp.creator, emp.creatorTime
-        from sys_emp emp
-        left join sys_dept dept on dept.id = emp.deptId
-        where 1=1
-        <if test="deptId!=null">
-            and emp.deptId = #{deptId}
+            emp.visibility,emp.creator, date_format(emp.creatorTime,'%Y-%m-%d')as  creatorTime
+            from sys_emp emp
+            left join sys_dept dept on dept.id = emp.deptId
+            where 1=1
+            <if test="deptId!=null">
+                and emp.deptId = #{deptId}
+            </if>
+            <if test="deptCode!=null">
+                and dept.code = #{deptCode}
+            </if>
         </if>
-        <if test="deptCode!=null">
-            and dept.code = #{deptCode}
+        <if test="SQL_TYPE_KEY == 2">
+            SELECT
+            emp.id,emp.name,emp.code,emp.pwd,emp.sex,emp.address,emp.idCard,emp.email,emp.education,emp.school,emp.phone,emp.deptId,dept.name as deptName,
+            emp.visibility,emp.creator, CONVERT(varchar, emp.creatorTime, 120 ) as creatorTime
+            from sys_emp emp
+            left join sys_dept dept on dept.id = emp.deptId
+            where 1=1
+            <if test="deptId!=null">
+                and emp.deptId = #{deptId}
+            </if>
+            <if test="deptCode!=null">
+                and dept.code = #{deptCode}
+            </if>
         </if>
     </select>
 
@@ -53,10 +69,18 @@
         </delete>
 
         <select id="findRoleList" resultType="map" parameterType="map">
-           select
-                r.id,r.name,r.code,r.power,r.orginId,r.userType,r.creator,r.creatorTime
-            from sys_role r
-            where 1=1
+            <if test="SQL_TYPE_KEY == 1">
+                select
+                r.id,r.name,r.code,r.power,r.orginId,r.userType,r.creator,date_format(r.creatorTime,'%Y-%m-%d')as  creatorTime
+                from sys_role r
+                where 1=1
+            </if>
+            <if test="SQL_TYPE_KEY == 2">
+                select
+                r.id,r.name,r.code,r.power,r.orginId,r.userType,r.creator,CONVERT(varchar, r.creatorTime, 120 ) as creatorTime
+                from sys_role r
+                where 1=1
+            </if>
         </select>
         <select id="exitRoleNameOrCode" resultType="java.lang.Integer" parameterType="map">
             select count(1)
@@ -89,13 +113,24 @@
             values (#{userId},#{roleId},#{creator},#{creatorTime});
         </insert>
         <select id="findWjOfRole" resultType="map" parameterType="java.lang.Integer">
-            select qu.id,qu.name,qu.code,qu.visibility,qu.creator as creatorId,emp.name as creatorName, qu.creatorTime,
+            <if test="SQL_TYPE_KEY == 1">
+                select qu.id,qu.name,qu.code,qu.visibility,qu.creator as creatorId,emp.name as creatorName, date_format(qu.creatorTime,'%Y-%m-%d')as  creatorTime,
                 qu.rule_Id,ru.name as ruleName,ro.id as roleId,ro.name as roleName
                 from qu_questionnaire qu
                 left join sys_emp emp on emp.id = qu.creator
                 left join qu_rule ru on ru.id = qu.rule_id
                 left join sys_role ro on ro.id = ru.belong_role
                 where ro.id = #{roleId} and qu.visibility = 1
+            </if>
+            <if test="SQL_TYPE_KEY == 2">
+                select qu.id,qu.name,qu.code,qu.visibility,qu.creator as creatorId,emp.name as creatorName, CONVERT(varchar, r.creatorTime, 120 ) as creatorTime,
+                qu.rule_Id,ru.name as ruleName,ro.id as roleId,ro.name as roleName
+                from qu_questionnaire qu
+                left join sys_emp emp on emp.id = qu.creator
+                left join qu_rule ru on ru.id = qu.rule_id
+                left join sys_role ro on ro.id = ru.belong_role
+                where ro.id = #{roleId} and qu.visibility = 1
+            </if>
         </select>
         <delete id="deleteUser" parameterType="java.lang.Integer">
             delete from sys_emp where id = #{userId}
@@ -107,7 +142,4 @@
         <update id="updateUserState" parameterType="map">
             update sys_emp set visibility = #{visibility} where  id = #{id}
         </update>
-
-
-
 </mapper>

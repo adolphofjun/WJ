@@ -55,7 +55,12 @@ public interface WjdcService {
      * @param wjId
      * @return
      */
-    List<Map> findQuestionOfWj(Integer wjId);
+    List<Map> findQuestionOfWj(Integer wjId,Integer wjNum) throws Exception;
+    /**
+     *
+     * @param map  state  quId
+     */
+    void updateQuestState(Map map);
 
     void updateRuleState(Map rule);
 

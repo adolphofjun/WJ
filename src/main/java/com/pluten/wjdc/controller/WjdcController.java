@@ -101,6 +101,25 @@ public class WjdcController {
         return JSON.toJSONString(resultMsg);
     }
 
+    @RequestMapping(value = "updateQuestState",method = RequestMethod.POST)
+    @ApiOperation(value = "修改题目状态", notes = "修改题目状态")
+    @ResponseBody
+    public String updateQuestState(@RequestBody @ApiParam(name = "题目", value = "传入json格式{\"quId\":\"1\",\"state\":\"1\"}", required = true) Map quest){
+        ResultMsg resultMsg;
+        try {
+            wjdcService.updateQuestState(quest);
+            resultMsg = ResultUtil.success("修改规则状态成功",quest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return JSON.toJSONString(resultMsg);
+    }
+
+
+
+
+
     @RequestMapping(value = "deleteRule/{ruleId}",method = RequestMethod.DELETE)
     @ApiOperation(value = "删除规则", notes = "删除规则")
     @ResponseBody
@@ -262,16 +281,21 @@ public class WjdcController {
         return JSON.toJSONString(resultMsg);
     }
 
-    @RequestMapping(value = "findQuestionOfWj/{wjId}",method = RequestMethod.GET)
+    @RequestMapping(value = "findQuestionOfWj/{wjId}/{wjNum}",method = RequestMethod.GET)
     @ApiOperation(value = "获取问卷下的所有题目", notes = "获取问卷下的所有题目")
     @ResponseBody
-    public ResultMsg findQuestionOfWj(@PathVariable Integer wjId){
+    public ResultMsg findQuestionOfWj(@PathVariable Integer wjId,@PathVariable Integer wjNum){
         ResultMsg resultMsg;
         try {
-            List<Map> maps = wjdcService.findQuestionOfWj(wjId);
+            List<Map> maps = wjdcService.findQuestionOfWj(wjId,wjNum);
             resultMsg = ResultUtil.success("获取问卷下的所有题目",maps);
         } catch (Exception e) {
             e.printStackTrace();
+            if("题库中必选题数量不够".endsWith(e.getMessage())){
+                resultMsg = ResultUtil.success("题库中必选题数量不够",null);
+            }else if("题库中随机题数量不够".endsWith(e.getMessage())){
+                resultMsg = ResultUtil.success("题库中随机题数量不够",null);
+            }
             resultMsg = ResultUtil.systemError();
         }
         return resultMsg;
