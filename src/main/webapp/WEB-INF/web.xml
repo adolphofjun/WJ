@@ -20,6 +20,15 @@
     <param-name>log4jRefreshInterval</param-name>
     <param-value>1800000</param-value>
   </context-param>
+  <filter>
+    <filter-name>loginfilter</filter-name>
+    <filter-class>com.pluten.filter.EncoidingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>loginfilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
   <!-- 配置Spring字符编码过滤器 -->
   <filter>
     <filter-name>encodingFilter</filter-name>
@@ -37,6 +46,10 @@
     <filter-name>encodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+
+
+
+
   <listener>
     <!--<description>配置Spring上下文监听器</description>-->
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
