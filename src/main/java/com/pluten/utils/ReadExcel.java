@@ -87,7 +87,7 @@ public class ReadExcel {
         }catch(Exception e){
             e.printStackTrace();
         } finally{
-          /*  if(is !=null)
+           if(is !=null)
             {
                 try{
                     is.close();
@@ -95,7 +95,7 @@ public class ReadExcel {
                     is = null;
                     e.printStackTrace();
                 }
-            }*/
+            }
         }
         return customerList;
     }
@@ -168,6 +168,9 @@ public class ReadExcel {
             Cell name = row.getCell(6);
             name.setCellType(Cell.CELL_TYPE_STRING);
             map.put("name",name.getStringCellValue());//题目
+            Cell maxScore = row.getCell(18);
+            maxScore.setCellType(Cell.CELL_TYPE_STRING);
+            map.put("maxScore",maxScore.getStringCellValue());//题目
             getSelect(map,row);
             //添加客户
             customerList.add(map);

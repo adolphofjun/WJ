@@ -92,6 +92,19 @@ public interface WjdcDao {
     List<Map> findMustBankIdByWjId(Integer wjId);
 
     /**
+     * 据规则获取规则中随机题库
+     * @param ruleId
+     * @return
+     */
+    List<Map> findRandomBankIdByRuleId(Integer ruleId);
+    /**
+     * 根据规则获取规则中必选题库
+     * @param ruleId
+     * @return
+     */
+    List<Map> findMustBankIdByRuleId(Integer ruleId);
+
+    /**
      * 据问卷Id获取到该问卷中的随机题题库
      * @param wjId
      * @return

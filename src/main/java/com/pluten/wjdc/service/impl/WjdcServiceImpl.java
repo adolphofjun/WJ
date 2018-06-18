@@ -206,43 +206,67 @@ public class WjdcServiceImpl implements WjdcService {
         return rs;
     }
 
+    /**
+     * 根据题库Id获取对应的题目
+     * @param rs
+     * @param maps
+     * @param type
+     * @param QuNum
+     * @throws Exception
+     */
     private void getQuestUtil(List<Map> rs, List<Map> maps, int type,int QuNum) throws  Exception {
+        float maxScoreSum = 0f;//最大分值和
+        if(rs.size()!=0){
+            Map m  = rs.get(rs.size()-1);
+            maxScoreSum = (Float)m.get("maxScore");
+        }
         int lackNum = 0;//必选题中缺少数量
         for(int i=0; i<maps.size(); i++){
             Map temp = maps.get(i);
             Integer bankId = (Integer) temp.get("bankId");
-            //对应题库下所有的随机选题
+            //对应题库下所有题目
             List<Map> quests = findQuestTitleByBankId(bankId,type);
             Float per = (Float) temp.get("per");
             float tp =  (per/100f);
             int quNum = (int)(QuNum * tp);//需求数量
-            int mustNum = quests.size();//题库数量
+            int bankNum = quests.size();//题库数量
             //如果题库中的题目小于等于需求的题目数
             int startMax = 0;//随机起点最大值
             int start = 0;
-            if(mustNum<=quNum) {
+
+            if(bankNum<=quNum) {
                 //rs.addAll(quests);
-                lackNum = quNum-mustNum;
+                lackNum = quNum-bankNum;
                 //将必选题加入列表
-                for(int j=0; j<mustNum; j++){
+                for(int j=0; j<bankNum; j++){
                     Map tempQu = quests.get(j);
                     Object obj = tempQu.get("id");
                     Integer questionId = Integer.parseInt(obj.toString());
+                    Object scoreObj = tempQu.get("maxScore");
+                    Float maxScore = Float.parseFloat(scoreObj.toString());
+                    maxScoreSum+=maxScore;
+                    tempQu.put("maxScore",maxScoreSum);
                     getQuestionSelect(tempQu,questionId);
                     rs.add(quests.get(j));
                 }
             }else{
-                startMax = mustNum - quNum;
+                startMax = bankNum - quNum;
                 start = MyUtils.getRandom(startMax);
                 //将必选题加入列表
                 for(int j=start; j<start+quNum; j++){
                     Map tempQu = quests.get(j);
                     Object obj = tempQu.get("id");
                     Integer questionId = Integer.parseInt(obj.toString());
+                    Object scoreObj = tempQu.get("maxScore");
+                    Float maxScore = Float.parseFloat(scoreObj.toString());
+                    maxScoreSum+=maxScore;
+                    tempQu.put("maxScore",maxScoreSum);
                     getQuestionSelect(tempQu,questionId);
                     rs.add(quests.get(j));
                 }
             }
+
+
 
 
         }
@@ -285,6 +309,10 @@ public class WjdcServiceImpl implements WjdcService {
         }
     }
 
+    /**
+     * 保存回答后的问卷
+     * @param map
+     */
     public void saveEmpWj(Map map) {
         //qu_id,an_time,score,creator,creatorTime,targetId
         List list = (List) map.get("data");

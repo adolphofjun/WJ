@@ -18,6 +18,8 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     public List<Map> findRoleList(Map map) {
+        if(map==null) map = new HashMap();
+        map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
         return userDao.findRoleList(map);
     }
 

@@ -273,7 +273,7 @@ menderTime  datetime,
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
- --部门信息表
+ #--部门信息表
 CREATE TABLE IF NOT EXISTS `sys_dept`(
    id INT UNSIGNED AUTO_INCREMENT,
 name varchar(255),
@@ -377,7 +377,7 @@ title varchar(255),
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*20180614*/
-alter table wj_title add ruleId int
+alter table wj_title add ruleId int;
 
 
 /*20180613*/
@@ -387,3 +387,8 @@ alter table qu_must_rule_id  add per float;
 alter table qu_rule  add num int;
 alter table sys_emp_qu  add targetId int;
 alter table sys_emp_qu  add answerId int;
+/*20180616*/
+ alter table qu_bank alter column isUser set default 0;
+ /*20180617*/
+ alter table qu_question add maxScore float;
+alter table qu_questionnaire  add num int;

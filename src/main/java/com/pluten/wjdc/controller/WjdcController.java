@@ -353,7 +353,6 @@ public class WjdcController {
          List<Map> maps = readExcel.getExcelInfo(name ,file);
              wjdcService.saveQuestion(maps);
              b=true;
-             b = false;
         logger.info("文件数据=========="+maps.toString());
         //迭代添加客户信息（注：实际上这里也可以直接将customerList集合作为参数，在Mybatis的相应映射文件中使用foreach标签进行批量添加。）
         return b;

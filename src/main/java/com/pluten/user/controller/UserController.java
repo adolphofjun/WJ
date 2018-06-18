@@ -68,6 +68,21 @@ public class UserController {
         return JSON.toJSONString(resultMsg);
     }
 
+    @RequestMapping(value = "logout",method = RequestMethod.POST)
+    @ApiOperation(value = "退出", notes = "退出")
+    @ResponseBody
+    public String logout(){
+        ResultMsg resultMsg;
+        try {
+            resultMsg = ResultUtil.success("退出成功",null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return JSON.toJSONString(resultMsg);
+    }
+
+
     @RequestMapping(value = "findRole",method = RequestMethod.GET)
     @ApiOperation(value = "查询角色", notes = "查询角色")
     @ResponseBody

@@ -44,7 +44,7 @@ public class BaseServiceImpl implements BaseService {
 
     public void deleteBank(Integer id) {
         Integer isUser = baseDao.isCanChangeBankState(id);
-        if(isUser==0)
+        if(isUser==0 || isUser==null)
         baseDao.deleteBank(id);
         else throw  new MyException(Constant.STATE_IS_NOT_VARIBALE.getExplanation());
     }
@@ -64,13 +64,13 @@ public class BaseServiceImpl implements BaseService {
     }
 
     public void updateBankState(Map map) {
-        String bankId = (String) map.get("id");
+        String bankId =  map.get("id")+"";
         if(null == bankId || "".equals(bankId)){
             throw  new MyException(Constant.ARGUMENT_EXCEPTION.getExplanation());
         }else{
             Integer bankId_ = Integer.parseInt(bankId);
             Integer isUser = baseDao.isCanChangeBankState(bankId_);
-            if(isUser==0)
+            if(isUser==0 || isUser==null)
                 baseDao.updateBankState(map);
             else throw  new MyException(Constant.STATE_IS_NOT_VARIBALE.getExplanation());
         }
