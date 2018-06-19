@@ -16,6 +16,7 @@ public class MyUtils {
 
 
     public static int getRandom(int max){
+        if(max==0) max = 1;
         Random ra =new Random();
         int rs = ra.nextInt(max);
         return  rs;

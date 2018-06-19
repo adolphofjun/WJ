@@ -30,8 +30,8 @@ public class WjdcServiceImpl implements WjdcService {
         Map map = (Map) rule.get("bankInfo");
         List<Map> random = null;
         List<Map> must = null;
-        random = (List<Map>) map.get("must");
-        must = (List<Map>) map.get("random");
+        random = (List<Map>) map.get("random");
+        must = (List<Map>) map.get("must");
         Integer ruleId = wjdcDao.saveRule(rule);
         String id =  rule.get("id")+"";
         ruleId = Integer.parseInt(id);
@@ -53,6 +53,8 @@ public class WjdcServiceImpl implements WjdcService {
             wjdcDao.saveRuleMust(temp);
         }
     }
+
+
 
 
 

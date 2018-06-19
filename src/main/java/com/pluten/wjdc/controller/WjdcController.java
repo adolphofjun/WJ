@@ -5,6 +5,8 @@ import com.pluten.utils.Constant;
 import com.pluten.utils.ReadExcel;
 import com.pluten.utils.ResultMsg;
 import com.pluten.utils.ResultUtil;
+import com.pluten.wjdc.service.WjJfService;
+import com.pluten.wjdc.service.WjService;
 import com.pluten.wjdc.service.WjdcService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -29,18 +31,15 @@ public class WjdcController {
 
     @Autowired
     private WjdcService wjdcService;
+    @Autowired
+    private WjService wjService;
+    @Autowired
+    private WjJfService wjJfService;
 
     @RequestMapping(value = "new_rule",method = RequestMethod.POST)
     @ApiOperation(value = "新建规则", notes = "新建规则")
     @ResponseBody
-    public ResultMsg newRule(@RequestBody @ApiParam(name = "角色", value = "传入json格式{\n" +
-            "\t\"name\": \"规则1\",\n" +
-            "\t\"code\": \"入了1\",\n" +
-            "\t\"belong_role\": \"1\",\n" +
-            "\t\"must_bank\": [\"1\", \"2\"],\n" +
-            "\t\"random_bank\": [\"1\", \"2\"],\n" +
-            "\t\"visibility\": \"0\"\n" +
-            "}", required = true) Map rule){
+    public ResultMsg newRule(@RequestBody @ApiParam(name = "规则", value = "传入json格式{\"name\": \"规则2\", \"code\": \"gz2\", \"belong_role\": \"1\", \"visibility\": \"1\", \"bankInfo\": {\"must\": [{\"id\": \"1\", \"per\": \"20\"}, {\"id\": \"2\", \"per\": 30}], \"random\": [{\"id\": \"1\", \"per\": \"20\"}, {\"id\": \"2\", \"per\": \"30\"}]}, \"num\": \"10\"}", required = true) Map rule){
         ResultMsg resultMsg;
         try {
             logger.info("====="+rule.toString());
@@ -161,6 +160,64 @@ public class WjdcController {
         return resultMsg;
     }
 
+    @RequestMapping(value = "newWj",method = RequestMethod.POST)
+    @ApiOperation(value = "新建问卷", notes = "新建问卷")
+    @ResponseBody
+    public ResultMsg newWj(@RequestBody @ApiParam(name = "新建问卷", value = "传入json格式{\n" +
+            "\t\"name\": \"问卷名称\",\n" +
+            "\t\"code\": \"问卷编码\",\n" +
+            "\t\"ruleId\": \"1\",\n" +
+            "\t\"creator\": \"1\",\n" +
+            "\t\"visibility\": \"0\",\n" +
+            "\t\"roleIds\":[\"1\", \"2\"],\n" +
+            "\t\"startTime\": \"2014-06-12 12:12:00\",\n" +
+            "\t\"endTime\": \"2014-06-12 13:12:00\"\n" +
+            "}", required = true) Map wj){
+        ResultMsg resultMsg;
+        try {
+            logger.info("========"+wj.toString());
+            wjService.newWj(wj);
+            resultMsg = ResultUtil.success("新建问卷成功",wj);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(Constant.ARGUMENT_EXCEPTION.getExplanation().equals(e.getMessage())){
+                resultMsg = ResultUtil.success(Constant.ARGUMENT_EXCEPTION.getExplanation(),null);
+            }else
+                resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
+    @RequestMapping(value = "findWjTitleList",method = RequestMethod.GET)
+    @ApiOperation(value = "查询问卷头", notes = "查询问卷头")
+    @ResponseBody
+    public ResultMsg findWjTitleList(){
+        ResultMsg resultMsg;
+        try {
+            List<Map> maps = wjService.findWjTitleList();
+            resultMsg = ResultUtil.success("查询问卷头成功",maps);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
+    @RequestMapping(value = "findWjQuest/{wjId}",method = RequestMethod.GET)
+    @ApiOperation(value = "查询问卷题目", notes = "查询问卷题目")
+    @ResponseBody
+    public ResultMsg findWjQuest(@PathVariable Integer wjId){
+        ResultMsg resultMsg;
+        try {
+            Map map = wjService.findQuestByWjId(wjId);
+            resultMsg = ResultUtil.success("查询问卷题目成功",map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
     //{data=[{select=C, quId=1}, {select=C, quId=2}], userId=1}
     @RequestMapping(value = "submit_wj",method = RequestMethod.POST)
     @ApiOperation(value = "提交问卷", notes = "提交问卷")
@@ -172,7 +229,7 @@ public class WjdcController {
           /* logger.info("====="+wj.get("data"));
             logger.info("====="+wj.get("userId"));
             logger.info("====="+wj.get("targetId"));*/
-            wjdcService.saveEmpWj(wj);
+            wjJfService.saveEveryOneRecord(wj);
             resultMsg = ResultUtil.success("提交成功",wj);
         } catch (Exception e) {
             e.printStackTrace();
@@ -190,6 +247,21 @@ public class WjdcController {
             logger.info("========="+quId);
             //List<Map> maps = wjdcService.findWjTarget(quId);
             resultMsg = ResultUtil.success("获取问卷的所有对象成功",null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
+    @RequestMapping(value = "findWjResult",method = RequestMethod.GET)
+    @ApiOperation(value = "查询调查问卷试卷卷头", notes = "查询调查问卷试卷卷头")
+    @ResponseBody
+    public ResultMsg findWjResult(){
+        ResultMsg resultMsg;
+        try {
+            List<Map> maps = wjdcService.findWj();
+            resultMsg = ResultUtil.success("查询调查问卷试卷卷头成功",maps);
         } catch (Exception e) {
             e.printStackTrace();
             resultMsg = ResultUtil.systemError();
@@ -230,10 +302,10 @@ public class WjdcController {
     @RequestMapping(value = "countWjResult",method = RequestMethod.POST)
     @ApiOperation(value = "统计问卷结果", notes = "统计问卷结果")
     @ResponseBody
-    public ResultMsg countWjResult(@RequestBody @ApiParam(name = "统计问卷结果", value = "传入json格式{\"quId\":\"1\",\"targetId\":\"1\"}", required = true) Map wj){
+    public ResultMsg countWjResult(@RequestBody @ApiParam(name = "统计问卷结果", value = "传入json格式{\"wjId\":\"1\",\"targetId\":\"1\"}", required = true) Map wj){
         ResultMsg resultMsg;
         try {
-            wjdcService.CountWj(wj);
+            wjJfService.saveSumRecord(wj);
             resultMsg = ResultUtil.success("统计问卷结果成功",wj);
         } catch (Exception e) {
             e.printStackTrace();

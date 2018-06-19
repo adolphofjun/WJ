@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pluten.wjdc.dao.WjJfDao" >
+
+      <insert id="saveEveryOneRecord" parameterType="java.util.Map">
+        insert into wj_record_everyone(answerId,targetId,wjId,score,answerTime)
+        values(#{answerId},#{targetId},#{wjId},#{score},#{answerTime})
+      </insert>
+
+    <insert id="saveSumRecord" parameterType="java.util.Map">
+        insert into wj_record_sum(targetId,wjId,score,answerTime)
+        values(#{targetId},#{wjId},#{score},#{answerTime})
+    </insert>
+
+    <select id="findAnswerRecord" parameterType="map" resultType="map">
+        select wj.id,wj.answerId,answer.name as answerName,wj.targetId,target.name as targetName,wj.wjId,wjtitle.name as wjName,wj.score,
+            date_format(wj.answerTime,'%Y-%m-%d %T') as answerTime
+            from wj_record_everyone wj
+            left join sys_emp answer on wj.answerId = answer.id
+            left join sys_emp target on wj.targetId = target.id
+             left wj_title wjtitle on wj.wjId = wjtitle.id
+            where wj.id = #{wjId} and wj.targetId = #{targetId}
+            order by wj.score
+    </select>
+
+    <select id="findAnswerRecordSum" parameterType="map" resultType="map">
+        select wj.id, wj.targetId,target.name as targetName , wj.wjId,wjtitle.name as wjName,wj.score,
+            date_format(wj.answerTime,'%Y-%m-%d %T') as answerTime
+            from wj_record_sum wj
+            left wj_title wjtitle on wj.wjId = wjtitle.id
+            left join sys_emp target on wj.targetId = target.id
+            where 1=1
+             <if test="wjId!=null">
+                 and wj.id = #{wjId}
+             </if>
+            <if test="targetId!=null">
+                and wj.targetId = #{targetId}
+            </if>
+        order by wj.answerTime
+    </select>
+
+
+</mapper>

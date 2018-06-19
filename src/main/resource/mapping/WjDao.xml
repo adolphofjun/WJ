@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pluten.wjdc.dao.WjDao" >
+
+    <select id="findRandomBankIdByRuleId" resultType="map" parameterType="java.lang.Integer">
+        select randomId.id,randomId.belong_rule as ruleId,randomId.qu_bank_id as bankId, randomId.per
+        from qu_random_rule_id randomId
+        where randomId.belong_rule = #{ruleId}
+    </select>
+
+    <select id="findMustBankIdByRuleId" resultType="map" parameterType="java.lang.Integer">
+            select mustId.id,mustId.belong_rule as ruleId,mustId.qu_bank_id as bankId, mustId.per
+             from qu_random_rule_id mustId
+        where mustId.belong_rule = #{ruleId}
+    </select>
+
+    <select id="findRuleByRuId" parameterType="map" resultType="map">
+        <if test="SQL_TYPE_KEY==1">
+            select  ru.id,ru.name,ru.code,ru.belong_role as roleId,ro.name as roleName,ru.visibility,ru.num,
+            ru.creator,emp.name as creatorName, date_format(ru.creatorTime,'%Y-%m-%d') as  creatorTime
+            from qu_rule ru
+            left join sys_emp emp on emp.id = ru.creator
+            left join sys_role ro on ro.id = ru.belong_role
+            where ru.id = #{ruleId}
+        </if>
+        <if test="SQL_TYPE_KEY==2">
+            select  ru.id,ru.name,ru.code,ru.belong_role as roleId,ro.name as roleName,ru.visibility,ru.num,
+            ru.creator,emp.name as creatorName, CONVERT(varchar, ru.creatorTime, 120 ) as creatorTime
+            from qu_rule ru
+            left join sys_emp emp on emp.id = ru.creator
+            left join sys_role ro on ro.id = ru.belong_role
+            where ru.id = #{ruleId}
+        </if>
+    </select>
+    <!---->
+    <select id="findQuestionByBankId" parameterType="map" resultType="map">
+        <if test="SQL_TYPE_KEY == 1">
+            select qu.id,qu.name,qu.code,qu.type_id,
+            qu.must,qu.bank_id,bank.name as bankName,qu.visibility,qu.maxScore,
+            qu.isDelete,qu.keyWord,qu.creator,emp.name as creatorName,
+            date_format(qu.creatorTime,'%Y-%m-%d')as  creatorTime
+            from qu_question qu
+            left join qu_bank bank on bank.id = qu.bank_id
+            left join sys_emp emp on emp.id = qu.creator
+            where 1=1
+            <if test="bankId!=null">
+                and qu.bank_id = #{bankId}
+            </if>
+            <if test="must!=null">
+                and qu.must = #{must}
+            </if>
+        </if>
+        <if test="SQL_TYPE_KEY == 2">
+            select qu.id,qu.name,qu.code,qu.type_id,
+            qu.must,qu.bank_id,bank.name as bankName,qu.visibility,
+            qu.isDelete,qu.keyWord,qu.creator,emp.name as creatorName,
+            CONVERT(varchar, qu.creatorTime, 120 ) as creatorTime
+            from qu_question qu
+            left join qu_bank bank on bank.id = qu.bank_id
+            left join sys_emp emp on emp.id = qu.creator
+            where 1=1
+            <if test="bankId!=null">
+                and qu.bank_id = #{bankId}
+            </if>
+            <if test="must!=null">
+                and qu.must = #{must}
+            </if>
+        </if>
+    </select>
+
+    <select id="findSelectA" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name as name from qu_select_a a where a.belong_qu = #{questionId}
+    </select>
+    <select id="findSelectB" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name as name from qu_select_b a where a.belong_qu = #{questionId}
+    </select>
+    <select id="findSelectC" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name as name from qu_select_c a where a.belong_qu = #{questionId}
+    </select>
+    <select id="findSelectD" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name as name from qu_select_d a where a.belong_qu = #{questionId}
+    </select>
+    <select id="findSelectE" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name as name from qu_select_e a where a.belong_qu = #{questionId}
+    </select>
+    <select id="findSelectF" resultType="map" parameterType="java.lang.Integer">
+        select a.id,a.title as title,a.score as score,a.name as name from qu_select_f a where a.belong_qu = #{questionId}
+    </select>
+
+
+
+    <insert id="saveWjTitle" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+        insert into wj_title (name,code,sumScore,num,visibility,startTime,endTime,creator,creatorTime)
+        values(#{name},#{code},#{sumScore},#{num},#{visibility},#{startTime},#{endTime},#{creator},#{creatorTime})
+    </insert>
+
+    <insert id="saveWjQuestion"  parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into wj_question(name,code,wjId,type_id,must,creator,creatorTime)
+        values (#{name},#{code},#{wjId},#{type_id},#{must},#{creator},#{creatorTime});
+    </insert>
+    <insert id="saveWjSelectA" parameterType="map">
+        insert into wj_select_A(name,code,score,belong_wj_qu,title)
+        values (#{name},#{code},#{score},#{belong_wj_qu},#{title});
+    </insert>
+    <insert id="saveWjSelectB" parameterType="map">
+        insert into wj_select_B(name,code,score,belong_wj_qu,title)
+        values (#{name},#{code},#{score},#{belong_wj_qu},#{title});
+    </insert>
+    <insert id="saveWjSelectC" parameterType="map">
+        insert into wj_select_C(name,code,score,belong_wj_qu,title)
+        values (#{name},#{code},#{score},#{belong_wj_qu},#{title});
+    </insert>
+    <insert id="saveWjSelectD" parameterType="map">
+        insert into wj_select_D(name,code,score,belong_wj_qu,title)
+        values (#{name},#{code},#{score},#{belong_wj_qu},#{title});
+    </insert>
+    <insert id="saveWjSelectE" parameterType="map">
+        insert into wj_select_E(name,code,score,belong_wj_qu,title)
+        values (#{name},#{code},#{score},#{belong_wj_qu},#{title});
+    </insert>
+    <insert id="saveWjSelectF" parameterType="map">
+        insert into wj_select_F(name,code,score,belong_wj_qu,title)
+        values (#{name},#{code},#{score},#{belong_wj_qu},#{title});
+    </insert>
+
+    <!--查询问卷头信息-->
+    <select id="findWjTitleList" resultType="map" parameterType="map">
+        <if test="SQL_TYPE_KEY == 1">
+            select wj.id,wj.name,wj.sumScore,wj.num,wj.code,wj.visibility,wj.creator as creatorId,emp.name as creatorName,date_format(wj.creatorTime,'%Y-%m-%d') as creatorTime,
+            date_format(wj.startTime,'%Y-%m-%d %T') as startTime,date_format(wj.endTime,'%Y-%m-%d %T') as endTime
+            from wj_title wj
+            left join sys_emp emp on emp.id =wj.creator
+        </if>
+        <if test="SQL_TYPE_KEY == 2">
+        </if>
+    </select>
+
+    <!--查询问卷头信息-->
+    <select id="findWjTitle" resultType="map" parameterType="java.lang.Integer">
+            select wj.id,wj.name,wj.sumScore,wj.num,wj.code,wj.visibility,wj.creator as creatorId,emp.name as creatorName,date_format(wj.creatorTime,'%Y-%m-%d') as creatorTime,
+            date_format(wj.startTime,'%Y-%m-%d %T') as startTime,date_format(wj.endTime,'%Y-%m-%d %T') as endTime
+            from wj_title wj
+            left join sys_emp emp on emp.id =wj.creator
+            where wj.id = #{wjId}
+    </select>
+
+    <select id="findWjQuestionByWj" parameterType="java.lang.Integer" resultType="map">
+        select  wj.id,wj.`name`,wj.must,wj.type_id,wj.wjId
+            from wj_question wj
+            where wj.wjId = #{wjId}
+            order by wj.type_id
+    </select>
+    <select id="findWjSelectA" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name from wj_select_a a where a.belong_wj_qu = #{questionId}
+    </select>
+    <select id="findWjSelectB" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name from wj_select_b a where a.belong_wj_qu = #{questionId}
+    </select>
+    <select id="findWjSelectC" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name from wj_select_c a where a.belong_wj_qu = #{questionId}
+    </select>
+    <select id="findWjSelectD" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name from wj_select_d a where a.belong_wj_qu = #{questionId}
+    </select>
+    <select id="findWjSelectE" resultType="map" parameterType="java.lang.Integer">
+        select  a.id,a.title as title,a.score as score,a.name from wj_select_e a where a.belong_wj_qu = #{questionId}
+    </select>
+    <select id="findWjSelectF" resultType="map" parameterType="java.lang.Integer">
+        select a.id,a.title as title,a.score as score,a.name  from wj_select_f a where a.belong_wj_qu = #{questionId}
+    </select>
+
+
+
+
+
+</mapper>
