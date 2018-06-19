@@ -1,5 +1,6 @@
 package com.pluten.wjdc.service.impl;
 
+import com.pluten.utils.Constant;
 import com.pluten.utils.Globel;
 import com.pluten.utils.MyException;
 import com.pluten.utils.MyUtils;
@@ -136,7 +137,7 @@ public class WjServiceimpl implements WjService {
             int startMax = 0;//随机起点最大值
             int start = 0;
             if(bankNum<quNum) {
-                throw  new MyException("题库中题目数量不够，请确认题目数量");
+                throw  new MyException((Constant.QUESTION_NOT_ENOUGH.getExplanation()));
             }else{
                 startMax = bankNum - quNum;
                 start = MyUtils.getRandom(startMax);

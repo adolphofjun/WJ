@@ -12,5 +12,5 @@ public interface DeptService {
 
     void deleteDept(Integer deptId);
 
-    List<Map> findDeptList(Object o);
+    List<Map> findDeptList(Map map);
 }

@@ -3,7 +3,7 @@
 <mapper namespace="com.pluten.base.dao.BaseDao" >
 
 
-      <insert id="saveBank" parameterType="map">
+    <!--  <insert id="saveBank" parameterType="map">
           insert into qu_bank(name,code,type,visibility,creator,creatorTime)
           values (#{name},#{code},#{type},#{visibility},#{creator},#{creatorTime});
       </insert>
@@ -60,7 +60,7 @@
         <select id="finddeptIdByCode" parameterType="java.lang.String" resultType="java.lang.Integer">
           SELECT id from sys_dept where code = #{code}
         </select>
-        <!--判断部门状态是否可以改变-->
+        &lt;!&ndash;判断部门状态是否可以改变&ndash;&gt;
         <select id="isCanChangeDeptState" resultType="java.lang.Integer" parameterType="java.lang.Integer">
            select
                 d.isUser
@@ -68,7 +68,7 @@
             where 1=1 and d.id = #{deptId}
         </select>
 
-        <!--判断题库状态是否可以改变-->
+        &lt;!&ndash;判断题库状态是否可以改变&ndash;&gt;
         <select id="isCanChangeBankState" resultType="java.lang.Integer" parameterType="java.lang.Integer">
            select
                 d.isUser
@@ -76,7 +76,7 @@
             where 1=1 and d.id = #{bankId}
         </select>
 
-        <!--查询一个部门下一个角色下的员工-->
+        &lt;!&ndash;查询一个部门下一个角色下的员工&ndash;&gt;
         <select id="findUserOfRoleAndDept" resultType="map" parameterType="map">
             select emp.id as userId,emp.name,emp.code
                 from sys_emp emp,sys_user_role ur,sys_role ro
@@ -87,6 +87,6 @@
         </update>
         <update id="updateDeptState" parameterType="map">
             update sys_dept set visibility = #{visibility} where id = #{id}
-        </update>
+        </update>-->
 
 </mapper>

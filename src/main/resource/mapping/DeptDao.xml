@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pluten.base.dao.DeptDao" >
+
+        <insert id="saveDept" parameterType="map">
+              insert into sys_dept(name,code,visibility,creator,creatorTime)
+              values (#{name},#{code},#{visibility},#{creator},#{creatorTime});
+        </insert>
+        <select id="exitDeptNameOrCode" resultType="java.lang.Integer" parameterType="map">
+                select count(1)
+                from sys_dept
+                where name = #{name,jdbcType=VARCHAR} or code = #{code,jdbcType=VARCHAR}
+        </select>
+        <delete id="deleteDept" parameterType="java.lang.Integer">
+            delete from sys_dept where id = #{id}
+        </delete>
+    <select id="findDeptList" resultType="map" parameterType="map">
+        <if test="SQL_TYPE_KEY == 1">
+            select
+            d.id,d.name,d.code,d.visibility,d.creator, date_format(d.creatorTime,'%Y-%m-%d')as  creatorTime
+            from sys_dept d
+            where 1=1
+        </if>
+        <if test="SQL_TYPE_KEY == 2">
+            select
+            d.id,d.name,d.code,d.visibility,d.creator, CONVERT(varchar, d.creatorTime, 120 ) as creatorTime
+            from sys_dept d
+            where 1=1
+        </if>
+    </select>
+    <select id="finddeptIdByCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+          SELECT id from sys_dept where code = #{code}
+        </select>
+    <!--判断部门状态是否可以改变-->
+    <select id="isCanChangeDeptState" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+           select
+                d.isUser
+            from sys_dept d
+            where 1=1 and d.id = #{deptId}
+        </select>
+
+
+</mapper>

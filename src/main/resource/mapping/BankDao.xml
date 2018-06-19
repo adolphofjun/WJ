@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pluten.base.dao.BankDao" >
+
+
+         <insert id="saveBank" parameterType="map">
+              insert into qu_bank(name,code,type,visibility,creator,creatorTime)
+              values (#{name},#{code},#{type},#{visibility},#{creator},#{creatorTime});
+         </insert>
+        <!--判断题库状态是否可以改变-->
+        <select id="isCanChangeBankState" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+           select
+                d.isUser
+            from qu_bank d
+            where 1=1 and d.id = #{bankId}
+        </select>
+        <update id="updateBankState" parameterType="map">
+            update qu_bank set visibility = #{visibility} where id = #{id}
+        </update>
+        <select id="findBankList" resultType="map" parameterType="map">
+            <if test="SQL_TYPE_KEY == 1">
+                select
+                b.id,b.name,b.code,b.type, 0 as per, b.visibility,b.creator,  date_format(b.creatorTime,'%Y-%m-%d')as  creatorTime
+                from qu_bank b
+                where 1=1
+            </if>
+            <if test="SQL_TYPE_KEY == 2">
+                select
+                b.id,b.name,b.code,b.type, 0 as per, b.visibility,b.creator,  CONVERT(varchar, b.creatorTime, 120 ) as creatorTime
+                from qu_bank b
+                where 1=1
+            </if>
+      </select>
+         <delete id="deleteBank" parameterType="java.lang.Integer">
+            delete from qu_bank where id = #{id}
+        </delete>
+
+
+</mapper>

@@ -9,6 +9,7 @@ import com.pluten.wjdc.controller.WjdcController;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ import java.util.Map;
 public class RuleController {
 
     private static Logger logger = Logger.getLogger(RuleController.class);
+    @Autowired
     private RuleService ruleService;
 
     @RequestMapping(value = "new_rule",method = RequestMethod.POST)

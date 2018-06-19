@@ -1,11 +1,14 @@
 package com.pluten.base.dao;
 
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Map;
 
 /**
  * 基础数据
  */
+@Repository
 public interface BaseDao {
     /**
      * 保存题库

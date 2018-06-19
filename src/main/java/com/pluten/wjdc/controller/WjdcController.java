@@ -180,8 +180,9 @@ public class WjdcController {
             resultMsg = ResultUtil.success("新建问卷成功",wj);
         } catch (Exception e) {
             e.printStackTrace();
-            if(Constant.ARGUMENT_EXCEPTION.getExplanation().equals(e.getMessage())){
-                resultMsg = ResultUtil.success(Constant.ARGUMENT_EXCEPTION.getExplanation(),null);
+            System.out.println("====新建问卷成功==");
+            if(Constant.QUESTION_NOT_ENOUGH.getExplanation().equals(e.getMessage())){
+                resultMsg = ResultUtil.success(Constant.QUESTION_NOT_ENOUGH.getExplanation(),null);
             }else
                 resultMsg = ResultUtil.systemError();
         }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pluten.base.dao.RuleDao" >
+
+    <insert id="saveRule" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into qu_rule(name,code,belong_role,visibility,num,creator,creatorTime)
+        values (#{name},#{code},#{belong_role},#{visibility},#{num},#{creator},#{creatorTime});
+     </insert>
+
+    <insert id="saveRuleMust" parameterType="map">
+        insert into qu_must_rule_id(belong_rule,qu_bank_id,per)
+        values (#{belong_rule},#{qu_bank_id},#{per});
+    </insert>
+    <insert id="saveRuleRandom" parameterType="map">
+        insert into qu_random_rule_id(belong_rule,qu_bank_id,per)
+        values (#{belong_rule},#{qu_bank_id},#{per});
+    </insert>
+    <update id="updateRuleState" parameterType="map">
+        update qu_rule set visibility = #{visibility} where id = #{id}
+    </update>
+    <select id="findRuleRandom" resultType="map" parameterType="java.lang.Integer">
+         select ru.id,bank.id as bankId,bank.name,ru.per from qu_random_rule_id ru
+            left join qu_bank bank on bank.id = ru.qu_bank_id
+            where ru.belong_rule = #{ruleId}
+    </select>
+    <delete id="deleteRuleById" parameterType="java.lang.Integer">
+        delete from qu_rule where id = #{ruleId}
+    </delete>
+    <select id="findRuleMust" resultType="map" parameterType="java.lang.Integer">
+         select ru.id,bank.id as bankId,bank.name,ru.per from qu_must_rule_id ru
+            left join qu_bank bank on bank.id = ru.qu_bank_id
+            where ru.belong_rule = #{ruleId}
+    </select>
+    <select id="findRule" parameterType="map" resultType="map">
+        <if test="SQL_TYPE_KEY==1">
+            select  ru.id,ru.name,ru.code,ru.belong_role as roleId,ro.name as roleName,ru.visibility,ru.num,
+            ru.creator,emp.name as creatorName, date_format(ru.creatorTime,'%Y-%m-%d') as  creatorTime
+            from qu_rule ru
+            left join sys_emp emp on emp.id = ru.creator
+            left join sys_role ro on ro.id = ru.belong_role
+        </if>
+        <if test="SQL_TYPE_KEY==2">
+            select  ru.id,ru.name,ru.code,ru.belong_role as roleId,ro.name as roleName,ru.visibility,ru.num,
+            ru.creator,emp.name as creatorName, CONVERT(varchar, ru.creatorTime, 120 ) as creatorTime
+            from qu_rule ru
+            left join sys_emp emp on emp.id = ru.creator
+            left join sys_role ro on ro.id = ru.belong_role
+        </if>
+    </select>
+
+
+</mapper>

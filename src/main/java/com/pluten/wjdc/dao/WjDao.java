@@ -1,8 +1,11 @@
 package com.pluten.wjdc.dao;
 
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public interface WjDao {
     /**
      * 据规则获取规则中随机题库

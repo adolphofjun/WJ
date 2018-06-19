@@ -6,12 +6,14 @@ import com.pluten.utils.DateUtils;
 import com.pluten.utils.Globel;
 import com.pluten.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service("ruleService")
 public class RuleServiceImpl implements RuleService {
 
     @Autowired
