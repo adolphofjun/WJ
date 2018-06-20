@@ -190,7 +190,8 @@ CREATE TABLE IF NOT EXISTS `wj_title`(
  /*--答题员工中间表*/
 CREATE TABLE IF NOT EXISTS `wj_answer_emp`(
 	id INT UNSIGNED AUTO_INCREMENT,
-	roleId int ,/*答题人Id*/
+  empName varchar(255) NOT NULL,/*问卷对象姓名*/
+  empId int,
 	wjId int,/*问卷Id*/
 	PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -199,7 +200,8 @@ CREATE TABLE IF NOT EXISTS `wj_answer_emp`(
  /*--问卷对象中间表*/
 CREATE TABLE IF NOT EXISTS `wj_target_emp`(
 	id INT UNSIGNED AUTO_INCREMENT,
-	roleId int ,/*答题人Id*/
+  empName varchar(255) NOT NULL,/*问卷对象姓名*/
+  empId int,
 	wjId int,/*问卷Id*/
 	PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -377,6 +379,8 @@ CREATE TABLE IF NOT EXISTS `wj_record_everyone`(
 	targetId int,
 	wjId int,
 	score float,
+	sumScore float,
+	num int,
 	answerTime datetime,
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -386,6 +390,7 @@ CREATE TABLE IF NOT EXISTS `wj_record_sum`(
    id INT UNSIGNED AUTO_INCREMENT,
 	targetId int,
 	wjId int,
+	ansNum int,
 	score float,
 	answerTime datetime,
    PRIMARY KEY (`id`)

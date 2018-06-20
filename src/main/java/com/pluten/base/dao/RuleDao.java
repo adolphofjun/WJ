@@ -12,11 +12,15 @@ public interface RuleDao {
 
     void saveRuleMust(Map temp);
 
+    void saveEmpOfRule(Map map);
+
     List<Map> findRule(Map map);
 
     List<Map> findRuleMust(Integer ruleId);
 
     List<Map> findRuleRandom(Integer ruleId);
+
+    List<Map> findEmpOfRule(Integer ruleId);
 
     void updateRuleState(Map rule);
 }

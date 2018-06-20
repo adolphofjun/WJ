@@ -23,14 +23,16 @@ public class RuleServiceImpl implements RuleService {
         //name=规则2, code=gz2, belong_role=1, visibility=1, bankInfo={must=[{id=1, per=20}, {id=2, per=30}], random=[{id=1, per=20}, {id=2, per=30}]}, num=10}
         if(rule==null) rule = new HashMap();
         rule.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
-        MyUtils.checkArgument(rule,"belong_role");
+        MyUtils.checkArgument(rule,"empList");
         if(!rule.containsKey("creator")) rule.put("creator","1");
         rule.put("creatorTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
         Map map = (Map) rule.get("bankInfo");
         List<Map> random = null;
         List<Map> must = null;
+        List emps = null;
         random = (List<Map>) map.get("random");
         must = (List<Map>) map.get("must");
+        emps = (List) rule.get("empList");
         Integer ruleId = ruleDao.saveRule(rule);
         String id =  rule.get("id")+"";
         ruleId = Integer.parseInt(id);
@@ -51,6 +53,15 @@ public class RuleServiceImpl implements RuleService {
             temp.put("per",must.get(i).get("per"));
             ruleDao.saveRuleMust(temp);
         }
+
+        for(int i=0; i<emps.size(); i++){
+            Map temp = new HashMap();
+            temp.put("ruleId",ruleId);
+            temp.put("empId",emps.get(i));
+            ruleDao.saveEmpOfRule(temp);
+        }
+
+
     }
 
     public List<Map> findRule(Map map) {

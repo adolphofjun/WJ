@@ -15,6 +15,10 @@
         insert into qu_random_rule_id(belong_rule,qu_bank_id,per)
         values (#{belong_rule},#{qu_bank_id},#{per});
     </insert>
+    <insert id="saveEmpOfRule" parameterType="map">
+        insert into qu_rule_emp(empId,ruleId)
+        values (#{empId},#{ruleId});
+    </insert>
     <update id="updateRuleState" parameterType="map">
         update qu_rule set visibility = #{visibility} where id = #{id}
     </update>
@@ -30,6 +34,13 @@
          select ru.id,bank.id as bankId,bank.name,ru.per from qu_must_rule_id ru
             left join qu_bank bank on bank.id = ru.qu_bank_id
             where ru.belong_rule = #{ruleId}
+    </select>
+    <select id="findEmpOfRule" resultType="map" parameterType="java.lang.Integer">
+        select remp.id,remp.empId,remp.ruleId,emp.name as empName
+        from qu_rule_emp remp
+        left join sys_emp emp on emp.id = remp.empId
+        where remp.ruleId = #{ruleId}
+
     </select>
     <select id="findRule" parameterType="map" resultType="map">
         <if test="SQL_TYPE_KEY==1">

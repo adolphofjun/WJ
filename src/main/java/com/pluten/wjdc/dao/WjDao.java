@@ -45,9 +45,17 @@ public interface WjDao {
     Integer saveWjSelectG(Map map);
     Integer saveWjSelectH(Map map);
 
+
     void saveWjTarget(Map wjTarget);
+    void saveWjAnswer(Map wjAnswer);
+    /**
+     * 判断是否已经答题过
+     * @param map  wjId targetId  answerId
+     */
+    Integer isExisted(Map map);
     List<Map> findWjTitleList(Map map);
     Map findWjTitle(Integer wjId);
+    List<Map> findWjTarget(Integer wjId);
 
     List<Map> findWjQuestionByWj(Integer wjId);
     Map findWjSelectA(Integer questionId);

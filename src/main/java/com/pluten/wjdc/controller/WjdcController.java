@@ -1,10 +1,7 @@
 package com.pluten.wjdc.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.pluten.utils.Constant;
-import com.pluten.utils.ReadExcel;
-import com.pluten.utils.ResultMsg;
-import com.pluten.utils.ResultUtil;
+import com.pluten.utils.*;
 import com.pluten.wjdc.service.WjJfService;
 import com.pluten.wjdc.service.WjService;
 import com.pluten.wjdc.service.WjdcService;
@@ -36,40 +33,6 @@ public class WjdcController {
     @Autowired
     private WjJfService wjJfService;
 
-    @RequestMapping(value = "new_rule",method = RequestMethod.POST)
-    @ApiOperation(value = "新建规则", notes = "新建规则")
-    @ResponseBody
-    public ResultMsg newRule(@RequestBody @ApiParam(name = "规则", value = "传入json格式{\"name\": \"规则2\", \"code\": \"gz2\", \"belong_role\": \"1\", \"visibility\": \"1\", \"bankInfo\": {\"must\": [{\"id\": \"1\", \"per\": \"20\"}, {\"id\": \"2\", \"per\": 30}], \"random\": [{\"id\": \"1\", \"per\": \"20\"}, {\"id\": \"2\", \"per\": \"30\"}]}, \"num\": \"10\"}", required = true) Map rule){
-        ResultMsg resultMsg;
-        try {
-            logger.info("====="+rule.toString());
-            wjdcService.saveRule(rule);
-            resultMsg = ResultUtil.success("新建规则成功",rule);
-        } catch (Exception e) {
-            e.printStackTrace();
-            if(Constant.ARGUMENT_EXCEPTION.getExplanation().equals(e.getMessage())){
-                resultMsg = ResultUtil.success(Constant.ARGUMENT_EXCEPTION.getExplanation(),null);
-            }else
-            resultMsg = ResultUtil.systemError();
-        }
-        return resultMsg;
-    }
-
-    @RequestMapping(value = "findRule",method = RequestMethod.GET)
-    @ApiOperation(value = "查询规则", notes = "查询规则")
-    @ResponseBody
-    public ResultMsg findRule(){
-        ResultMsg resultMsg;
-        try {
-            List<Map> maps = wjdcService.findRule(null);
-            resultMsg = ResultUtil.success("查询规则成功",maps);
-        } catch (Exception e) {
-            e.printStackTrace();
-            resultMsg = ResultUtil.systemError();
-        }
-        return resultMsg;
-    }
-
     @RequestMapping(value = "findQuestionByBanId/{bankId}",method = RequestMethod.GET)
     @ApiOperation(value = "获取题库对应的题目", notes = "获取题库对应的题目")
     @ResponseBody
@@ -85,19 +48,19 @@ public class WjdcController {
         return resultMsg;
     }
 
-    @RequestMapping(value = "updateRuleState",method = RequestMethod.POST)
-    @ApiOperation(value = "修改规则状态", notes = "修改规则状态")
+    @RequestMapping(value = "findWjTitleUsable",method = RequestMethod.GET)
+    @ApiOperation(value = "获取启用的问卷", notes = "获取启用的问卷")
     @ResponseBody
-    public String updateRuleState(@RequestBody @ApiParam(name = "题库", value = "传入json格式{\"id\":\"1\",\"visibility\":\"1\"}", required = true) Map rule){
+    public ResultMsg findWjTitleUsable(){
         ResultMsg resultMsg;
         try {
-            wjdcService.updateRuleState(rule);
-            resultMsg = ResultUtil.success("修改规则状态成功",rule);
+            List<Map> maps = wjService.findWjTitleUsableList();
+            resultMsg = ResultUtil.success("获取启用的问卷成功",maps);
         } catch (Exception e) {
             e.printStackTrace();
             resultMsg = ResultUtil.systemError();
         }
-        return JSON.toJSONString(resultMsg);
+        return resultMsg;
     }
 
     @RequestMapping(value = "updateQuestState",method = RequestMethod.POST)
@@ -107,59 +70,13 @@ public class WjdcController {
         ResultMsg resultMsg;
         try {
             wjdcService.updateQuestState(quest);
-            resultMsg = ResultUtil.success("修改规则状态成功",quest);
+            resultMsg = ResultUtil.success("修改题目状态成功",quest);
         } catch (Exception e) {
             e.printStackTrace();
             resultMsg = ResultUtil.systemError();
         }
         return JSON.toJSONString(resultMsg);
     }
-
-
-
-
-
-    @RequestMapping(value = "deleteRule/{ruleId}",method = RequestMethod.DELETE)
-    @ApiOperation(value = "删除规则", notes = "删除规则")
-    @ResponseBody
-    public String deleteRule(@PathVariable Integer ruleId){
-        ResultMsg resultMsg;
-        try {
-            wjdcService.deleteRuleById(ruleId);
-            resultMsg = ResultUtil.success("删除规则成功","");
-        } catch (Exception e) {
-            e.printStackTrace();
-            resultMsg = ResultUtil.systemError();
-        }
-        return JSON.toJSONString(resultMsg);
-    }
-
-    @RequestMapping(value = "new_wj",method = RequestMethod.POST)
-    @ApiOperation(value = "新建问卷", notes = "新建问卷")
-    @ResponseBody
-    public ResultMsg new_wj(@RequestBody @ApiParam(name = "角色", value = "传入json格式{\n" +
-            "\t\"name\": \"问卷名称\",\n" +
-            "\t\"code\": \"问卷编码\",\n" +
-            "\t\"rule_id\": \"1\",\n" +
-            "\t\"creator\": \"1\",\n" +
-            "\t\"visibility\": \"0\",\n" +
-            "\t\"roleIds\":[\"1\", \"2\"]\n" +
-            "}", required = true) Map wj){
-        ResultMsg resultMsg;
-        try {
-            logger.info("========"+wj.toString());
-            wjdcService.newWj(wj);
-            resultMsg = ResultUtil.success("新建问卷成功",wj);
-        } catch (Exception e) {
-            e.printStackTrace();
-            if(Constant.ARGUMENT_EXCEPTION.getExplanation().equals(e.getMessage())){
-                resultMsg = ResultUtil.success(Constant.ARGUMENT_EXCEPTION.getExplanation(),null);
-            }else
-                resultMsg = ResultUtil.systemError();
-        }
-        return resultMsg;
-    }
-
     @RequestMapping(value = "newWj",method = RequestMethod.POST)
     @ApiOperation(value = "新建问卷", notes = "新建问卷")
     @ResponseBody
@@ -204,6 +121,21 @@ public class WjdcController {
         return resultMsg;
     }
 
+    @RequestMapping(value = "findTargetOfWj/{wjId}",method = RequestMethod.GET)
+    @ApiOperation(value = "获取问卷对象", notes = "获取问卷对象")
+    @ResponseBody
+    public ResultMsg findTargetOfWj(@PathVariable Integer wjId){
+        ResultMsg resultMsg;
+        try {
+            List<Map> maps = wjService.findWjTarget(wjId);
+            resultMsg = ResultUtil.success("获取问卷对象成功",maps);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
     @RequestMapping(value = "findWjQuest/{wjId}",method = RequestMethod.GET)
     @ApiOperation(value = "查询问卷题目", notes = "查询问卷题目")
     @ResponseBody
@@ -239,6 +171,22 @@ public class WjdcController {
         return resultMsg;
     }
 
+    @RequestMapping(value = "isExisted",method = RequestMethod.POST)
+    @ApiOperation(value = "查询是否答题过", notes = "查询是否答题过")
+    @ResponseBody
+    public ResultMsg isExisted(@RequestBody  Map wj){
+        ResultMsg resultMsg;
+        try {
+            logger.info("====="+wj.toString());
+            Integer is = wjService.isExisted(wj);
+            resultMsg = ResultUtil.success("成功",is);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
     @RequestMapping(value = "findWjTarget/{quId}",method = RequestMethod.GET)
     @ApiOperation(value = "获取问卷的所有对象", notes = "获取问卷的所有对象")
     @ResponseBody
@@ -255,7 +203,7 @@ public class WjdcController {
         return resultMsg;
     }
 
-    @RequestMapping(value = "findWjResult",method = RequestMethod.GET)
+   /* @RequestMapping(value = "findWjResult",method = RequestMethod.GET)
     @ApiOperation(value = "查询调查问卷试卷卷头", notes = "查询调查问卷试卷卷头")
     @ResponseBody
     public ResultMsg findWjResult(){
@@ -268,9 +216,9 @@ public class WjdcController {
             resultMsg = ResultUtil.systemError();
         }
         return resultMsg;
-    }
+    }*/
 
-    @RequestMapping(value = "findWj",method = RequestMethod.GET)
+   /* @RequestMapping(value = "findWj",method = RequestMethod.GET)
     @ApiOperation(value = "查询调查问卷试卷卷头", notes = "查询调查问卷试卷卷头")
     @ResponseBody
     public ResultMsg findWj(){
@@ -298,7 +246,7 @@ public class WjdcController {
             resultMsg = ResultUtil.systemError();
         }
         return resultMsg;
-    }
+    }*/
 
     @RequestMapping(value = "countWjResult",method = RequestMethod.POST)
     @ApiOperation(value = "统计问卷结果", notes = "统计问卷结果")
@@ -316,7 +264,7 @@ public class WjdcController {
     }
 
 
-    @RequestMapping(value = "updateWjState",method = RequestMethod.POST)
+   /* @RequestMapping(value = "updateWjState",method = RequestMethod.POST)
     @ApiOperation(value = "修改问卷状态", notes = "修改问卷状态")
     @ResponseBody
     public String updateWjState(@RequestBody @ApiParam(name = "题库", value = "传入json格式{\"id\":\"1\",\"visibility\":\"1\"}", required = true) Map wj){
@@ -372,7 +320,7 @@ public class WjdcController {
             resultMsg = ResultUtil.systemError();
         }
         return resultMsg;
-    }
+    }*/
 
    @RequestMapping(value = "findQuestion",method = RequestMethod.GET)
     @ApiOperation(value = "查询题目", notes = "查询题目")
@@ -430,6 +378,10 @@ public class WjdcController {
         //迭代添加客户信息（注：实际上这里也可以直接将customerList集合作为参数，在Mybatis的相应映射文件中使用foreach标签进行批量添加。）
         return b;
     }
+
+
+
+
 }
 
 

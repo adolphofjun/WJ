@@ -13,7 +13,24 @@ public interface WjService {
 
     public List<Map> findWjTitleList();
 
+    /**
+     * 查询启用的问卷
+     * @return
+     */
+    public List<Map> findWjTitleUsableList();
+
     public Map findQuestByWjId(Integer wjId);
+    /**
+     * 判断是否已经答题过
+     * @param map  wjId targetId  answerId
+     */
+    Integer isExisted(Map map);
+    /**
+     * 查询问卷对应的问卷对象
+     * @param wjId
+     * @return
+     */
+    List<Map> findWjTarget(Integer wjId);
 
 
 }

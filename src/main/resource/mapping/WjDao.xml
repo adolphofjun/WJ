@@ -130,6 +130,10 @@
             date_format(wj.startTime,'%Y-%m-%d %T') as startTime,date_format(wj.endTime,'%Y-%m-%d %T') as endTime
             from wj_title wj
             left join sys_emp emp on emp.id =wj.creator
+            where 1=1
+            <if test="visibility!=null">
+               and  wj.visibility = #{visibility}
+            </if>
         </if>
         <if test="SQL_TYPE_KEY == 2">
         </if>
@@ -167,6 +171,30 @@
     </select>
     <select id="findWjSelectF" resultType="map" parameterType="java.lang.Integer">
         select a.id,a.title as title,a.score as score,a.name  from wj_select_f a where a.belong_wj_qu = #{questionId}
+    </select>
+
+
+    <!--保存问卷对象-->
+    <insert id="saveWjTarget" parameterType="map">
+        insert into wj_target_emp(empName,empId,wjId)
+        values (#{empName},#{empId},#{wjId});
+    </insert>
+
+    <!--保存问卷答题人-->
+    <insert id="saveWjAnswer" parameterType="map">
+        insert into wj_answer_emp(empName,empId,wjId)
+        values (#{empName},#{empId},#{wjId});
+    </insert>
+
+    <select id="findWjTarget" parameterType="java.lang.Integer" resultType="map">
+        select temp.id,temp.empName,temp.empId,temp.wjId
+        from wj_target_emp temp
+        where temp.wjId = #{wjId}
+    </select>
+    <!--判断是否已经答题过-->
+    <select id="isExisted" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM wj_record_everyone
+        WHERE wjId=#{wjId} and targetId=#{targetId} and answerId =#{answerId};
     </select>
 
 

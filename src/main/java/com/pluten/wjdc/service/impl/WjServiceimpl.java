@@ -1,9 +1,7 @@
 package com.pluten.wjdc.service.impl;
 
-import com.pluten.utils.Constant;
-import com.pluten.utils.Globel;
-import com.pluten.utils.MyException;
-import com.pluten.utils.MyUtils;
+import com.pluten.base.dao.RuleDao;
+import com.pluten.utils.*;
 import com.pluten.wjdc.dao.WjDao;
 import com.pluten.wjdc.service.WjService;
 import io.swagger.models.auth.In;
@@ -24,6 +22,8 @@ public class WjServiceimpl implements WjService {
 
     @Autowired
     private WjDao wjDao;
+    @Autowired
+    private RuleDao ruleDao;
 
     /**
      * 根据规则新建问卷
@@ -49,25 +49,37 @@ public class WjServiceimpl implements WjService {
             Object  obj = map.get("id");
             Integer wjId = Integer.parseInt(obj.toString());
             saveWjQuestion(wjId,rs);
-            //saveWjTarget(wjId,map);
+            List<Map> targets = ruleDao.findEmpOfRule(truleId);
+            saveWjTarget(wjId,targets);
 
         }
     }
 
-    private void saveWjTarget(Integer wjId, Map map) {
+    /**
+     * 保存问卷对象
+     * @param wjId
+     * @param masp
+     */
+    private void saveWjTarget(Integer wjId, List<Map> masp) {
         Map wjTarget = new HashMap();
         wjTarget.put("wjId",wjId);
-        List list = (List) map.get("roleIds");
-        for(int i=0; i<list.size(); i++){
-            wjTarget.put("empId",list.get(i));
+        for(int i=0; i<masp.size(); i++){
+            wjTarget.put("empId",masp.get(i).get("empId"));
+            wjTarget.put("empName",masp.get(i).get("empName"));
             wjDao.saveWjTarget(wjTarget);
         }
-
     }
 
     public List<Map> findWjTitleList() {
         Map map = new HashMap();
         map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
+        return wjDao.findWjTitleList(map);
+    }
+
+    public List<Map> findWjTitleUsableList() {
+        Map map = new HashMap();
+        map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
+        map.put("visibility",1);
         return wjDao.findWjTitleList(map);
     }
 
@@ -81,6 +93,14 @@ public class WjServiceimpl implements WjService {
         }
         wjTitle.put("quest",maps);
         return wjTitle;
+    }
+
+    public Integer isExisted(Map map) {
+       return wjDao.isExisted(map);
+    }
+
+    public List<Map> findWjTarget(Integer wjId) {
+        return wjDao.findWjTarget(wjId);
     }
 
     private void saveWjQuestion(Integer wjId, List<Map> rs) {
@@ -245,6 +265,15 @@ public class WjServiceimpl implements WjService {
             if(i==70)wjDao.saveWjSelectF(tmap);
         }
     }
+
+
+    public static void main(String[] arg){
+        String ss = "[2018-06-19T05: 01: 00.000Z,2018-06-22T17: 00: 00.000Z]";
+        String s = "2018-06-19T05: 01: 00.000Z";
+        String sss =  DateUtils.format(DateUtils.parse(s),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS);
+        System.out.println("===="+sss);
+    }
+
 
 
 }

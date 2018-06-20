@@ -3,13 +3,13 @@
 <mapper namespace="com.pluten.wjdc.dao.WjJfDao" >
 
       <insert id="saveEveryOneRecord" parameterType="java.util.Map">
-        insert into wj_record_everyone(answerId,targetId,wjId,score,answerTime)
-        values(#{answerId},#{targetId},#{wjId},#{score},#{answerTime})
+        insert into wj_record_everyone(answerId,targetId,wjId,score,sumScore,num,answerTime)
+        values(#{answerId},#{targetId},#{wjId},#{score},#{sumScore},#{num},#{answerTime})
       </insert>
 
     <insert id="saveSumRecord" parameterType="java.util.Map">
-        insert into wj_record_sum(targetId,wjId,score,answerTime)
-        values(#{targetId},#{wjId},#{score},#{answerTime})
+        insert into wj_record_sum(targetId,wjId,score,ansNum,answerTime)
+        values(#{targetId},#{wjId},#{score},#{ansNum},#{answerTime})
     </insert>
 
     <select id="findAnswerRecord" parameterType="map" resultType="map">
