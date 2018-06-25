@@ -34,7 +34,7 @@ public class DeptServiceImpl implements DeptService {
     public void updateDeptState(Map map) {
         if(map==null) map = new HashMap();
         map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
-        String deptId = (String) map.get("id");
+        String deptId = map.get("id")+"";
         if(null == deptId || "".equals(deptId)){
             throw  new MyException(Constant.ARGUMENT_EXCEPTION.getExplanation());
         }else{
