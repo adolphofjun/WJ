@@ -12,4 +12,6 @@ public interface RuleService {
     List<Map> findRule(Map map);
 
     void updateRuleState(Map rule);
+
+    void deleteRule(Integer ruleId);
 }

@@ -17,8 +17,9 @@
     <select id="findDeptList" resultType="map" parameterType="map">
         <if test="SQL_TYPE_KEY == 1">
             select
-            d.id,d.name,d.code,d.visibility,d.creator, date_format(d.creatorTime,'%Y-%m-%d')as  creatorTime
+            d.id,d.name,d.code,d.visibility,d.creator,emp.name as creatorName, date_format(d.creatorTime,'%Y-%m-%d')as  creatorTime
             from sys_dept d
+            left join sys_emp emp on emp.id = d.creator
             where 1=1
         </if>
         <if test="SQL_TYPE_KEY == 2">
@@ -38,6 +39,9 @@
             from sys_dept d
             where 1=1 and d.id = #{deptId}
         </select>
+    <update id="updateDeptState" parameterType="map">
+            update sys_dept set visibility = #{visibility} where id = #{id}
+        </update>
 
 
 </mapper>

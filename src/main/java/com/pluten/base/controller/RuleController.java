@@ -11,10 +11,7 @@ import io.swagger.annotations.ApiParam;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -69,6 +66,21 @@ public class RuleController {
         try {
             ruleService.updateRuleState(rule);
             resultMsg = ResultUtil.success("修改规则状态成功",rule);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
+        }
+        return JSON.toJSONString(resultMsg);
+    }
+
+    @RequestMapping(value = "deleteRule/{ruleId}",method = RequestMethod.DELETE)
+    @ApiOperation(value = "删除规则", notes = "删除规则")
+    @ResponseBody
+    public String deleteRule(@PathVariable Integer ruleId){
+        ResultMsg resultMsg;
+        try {
+            ruleService.deleteRule(ruleId);
+            resultMsg = ResultUtil.success("删除规则成功",ruleId);
         } catch (Exception e) {
             e.printStackTrace();
             resultMsg = ResultUtil.systemError();

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pluten.base.dao.QuestDao" >
+      <update id="editQuest" parameterType="map" >
+          update qu_question set name = #{name} where id = #{id}
+      </update>
+      <update id="editQuestSelectA" parameterType="map" >
+          update qu_select_a set name = #{name},score = #{score} where id = #{id}
+      </update>
+    <update id="editQuestSelectB" parameterType="map" >
+          update qu_select_b set name = #{name},score = #{score} where id = #{id}
+      </update>
+    <update id="editQuestSelectC" parameterType="map" >
+          update qu_select_c set name = #{name},score = #{score} where id = #{id}
+      </update>
+    <update id="editQuestSelectD" parameterType="map" >
+          update qu_select_d set name = #{name},score = #{score} where id = #{id}
+      </update>
+    <update id="editQuestSelectE" parameterType="map" >
+          update qu_select_e set name = #{name},score = #{score} where id = #{id}
+      </update>
+    <update id="editQuestSelectF" parameterType="map" >
+          update qu_select_f set name = #{name},score = #{score} where id = #{id}
+      </update>
+
+
+</mapper>

@@ -45,6 +45,7 @@ public class WjServiceimpl implements WjService {
             sumScore = getWjQuestion(truleId,tnum,rs);
             map.put("sumScore",sumScore);
             map.put("num",tnum);
+            map.put("isDelete",0);
             wjDao.saveWjTitle(map);
             Object  obj = map.get("id");
             Integer wjId = Integer.parseInt(obj.toString());
@@ -101,6 +102,27 @@ public class WjServiceimpl implements WjService {
 
     public List<Map> findWjTarget(Integer wjId) {
         return wjDao.findWjTarget(wjId);
+    }
+
+    public void deleteWj(Integer wjId) {
+        Integer isDelete = wjDao.findIsDelete(wjId);
+        if(isDelete==0){
+            wjDao.deleteWj(wjId);
+            wjDao.deleteTargetOfWj(wjId);
+        }else{
+            throw  new MyException(Constant.STATE_IS_NOT_VARIBALE.getExplanation());
+        }
+    }
+
+    public void updateWjState(Map map) {
+        String id = map.get("wjId")+"";
+        int wjId = Integer.parseInt(id);
+        Integer isDelete = wjDao.findIsDelete(wjId);
+        if(isDelete==0){
+           wjDao.updateWjState(map);
+        }else{
+            throw  new MyException(Constant.STATE_IS_NOT_VARIBALE.getExplanation());
+        }
     }
 
     private void saveWjQuestion(Integer wjId, List<Map> rs) {

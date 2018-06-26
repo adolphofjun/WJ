@@ -3,12 +3,14 @@ package com.pluten.wjdc.service.impl;
 import com.pluten.utils.Constant;
 import com.pluten.utils.DateUtils;
 import com.pluten.utils.MyException;
+import com.pluten.wjdc.dao.WjDao;
 import com.pluten.wjdc.dao.WjJfDao;
 import com.pluten.wjdc.service.WjJfService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,12 +21,15 @@ import java.util.Map;
 public class WjJfServiceImpl implements WjJfService {
     @Autowired
     private WjJfDao wjJfDao;
+    @Autowired private WjDao wjDao;
     public void saveEveryOneRecord(Map map) {
         List list = (List) map.get("data");
         float score = getSumScore(list);
         map.put("score",score);
         map.put("answerTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
         wjJfDao.saveEveryOneRecord(map);
+        map.put("isDelete",1);
+        wjDao.updateWjTitleIsDelete(map);
     }
 
     public void saveSumRecord(Map map) {

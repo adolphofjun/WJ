@@ -32,5 +32,9 @@ public interface WjService {
      */
     List<Map> findWjTarget(Integer wjId);
 
+    void deleteWj(Integer wjId);
+
+    void updateWjState(Map map);
+
 
 }

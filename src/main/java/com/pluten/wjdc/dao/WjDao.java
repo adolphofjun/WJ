@@ -66,4 +66,21 @@ public interface WjDao {
     Map findWjSelectF(Integer questionId);
     Map findWjSelectG(Integer questionId);
 
+    /**
+     * 用于判断问卷是否可以删除
+     * @param wjId
+     * @return
+     */
+    Integer findIsDelete(Integer wjId);
+
+    /**
+     * 提交问卷时跟新问卷状态
+     * @param map
+     */
+    void updateWjTitleIsDelete(Map map);
+    void deleteWj(Integer wjId);
+    void deleteTargetOfWj(Integer wjId);
+
+    void updateWjState(Map map);
+
 }

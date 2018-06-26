@@ -20,8 +20,9 @@
         <select id="findBankList" resultType="map" parameterType="map">
             <if test="SQL_TYPE_KEY == 1">
                 select
-                b.id,b.name,b.code,b.type, 0 as per, b.visibility,b.creator,  date_format(b.creatorTime,'%Y-%m-%d')as  creatorTime
+                b.id,b.name,b.code,b.type, 0 as per, b.visibility,b.creator,emp.name as createName,  date_format(b.creatorTime,'%Y-%m-%d')as  creatorTime
                 from qu_bank b
+                left join sys_emp emp on emp.id = b.creator
                 where 1=1
             </if>
             <if test="SQL_TYPE_KEY == 2">

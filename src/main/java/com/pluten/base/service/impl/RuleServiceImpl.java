@@ -85,4 +85,10 @@ public class RuleServiceImpl implements RuleService {
     public void updateRuleState(Map rule) {
         ruleDao.updateRuleState(rule);
     }
+
+    public void deleteRule(Integer ruleId) {
+        ruleDao.deleteRule(ruleId);
+        ruleDao.deleteMust(ruleId);
+        ruleDao.deleteRandom(ruleId);
+    }
 }

@@ -54,7 +54,7 @@
     </select>
 
     <select id="getRoleName" parameterType="int" resultType="map">
-       select ur.userId,ro.id as roleId,ro.name  as roleName
+       select ur.userId,ro.id as roleId,ro.name  as roleName,ro.code as roleCode
             from sys_role ro,sys_user_role ur
             where ro.id  = ur.roleId and ur.userId = #{id}
     </select>

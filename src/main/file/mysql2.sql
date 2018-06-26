@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `qu_rule`(
 	visibility int ,/*--是否可用*/
 	must_bank_id int,/*--必选题题库*/
 	random_bank_id int,/*--随机题题库*/
-	type int,,/*--单人还是多人*/
+	type int,/*--单人还是多人*/
 	creator int,
 	num int,/*--改规则下有多少题目*/
 	creatorTime datetime,

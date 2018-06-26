@@ -90,8 +90,8 @@
 
 
     <insert id="saveWjTitle" parameterType="map" useGeneratedKeys="true" keyProperty="id">
-        insert into wj_title (name,code,sumScore,num,visibility,startTime,endTime,creator,creatorTime)
-        values(#{name},#{code},#{sumScore},#{num},#{visibility},#{startTime},#{endTime},#{creator},#{creatorTime})
+        insert into wj_title (name,code,sumScore,num,visibility,isDelete,startTime,endTime,creator,creatorTime)
+        values(#{name},#{code},#{sumScore},#{num},#{visibility},#{isDelete},#{startTime},#{endTime},#{creator},#{creatorTime})
     </insert>
 
     <insert id="saveWjQuestion"  parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
@@ -133,6 +133,9 @@
             where 1=1
             <if test="visibility!=null">
                and  wj.visibility = #{visibility}
+            </if>
+            <if test="isDelete!=null">
+                and wj.isDelete = #{isDelete}
             </if>
         </if>
         <if test="SQL_TYPE_KEY == 2">
@@ -191,12 +194,30 @@
         from wj_target_emp temp
         where temp.wjId = #{wjId}
     </select>
+
     <!--判断是否已经答题过-->
     <select id="isExisted" parameterType="map" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM wj_record_everyone
         WHERE wjId=#{wjId} and targetId=#{targetId} and answerId =#{answerId};
     </select>
 
+    <select id="findIsDelete" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select isDelete from wj_title where id = #{wjId}
+    </select>
+
+    <update id="updateWjTitleIsDelete" parameterType="map">
+        update wj_title set isDelete = #{isDelete}  where wjId = #{wjId}
+    </update>
+    <delete id="deleteTargetOfWj" parameterType="java.lang.Integer">
+        delete from wj_title where id = #{wjId}
+    </delete>
+    <delete id="deleteWj" parameterType="java.lang.Integer">
+        delete from wj_target_emp where wjId = #{wjId}
+    </delete>
+
+    <update id="updateWjState" parameterType="map">
+        update wj_title set visibility = #{visibility}  where id = #{wjId}
+    </update>
 
 
 

@@ -23,4 +23,8 @@ public interface RuleDao {
     List<Map> findEmpOfRule(Integer ruleId);
 
     void updateRuleState(Map rule);
+
+    void deleteRule(Integer ruleId);
+    void deleteMust(Integer ruleId);
+    void deleteRandom(Integer ruleId);
 }

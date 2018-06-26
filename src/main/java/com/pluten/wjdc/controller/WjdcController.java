@@ -263,6 +263,42 @@ public class WjdcController {
         return resultMsg;
     }
 
+    @RequestMapping(value = "updateWjState",method = RequestMethod.POST)
+    @ApiOperation(value = "修改问卷状态", notes = "修改问卷状态")
+    @ResponseBody
+    public ResultMsg updateWjState(@RequestBody @ApiParam(name = "修改问卷状态", value = "传入json格式{\"wjId\":\"1\",\"visibility\":\"1\"}", required = true) Map wj){
+        ResultMsg resultMsg;
+        try {
+            wjService.updateWjState(wj);
+            resultMsg = ResultUtil.success("修改问卷状态成功",wj);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(Constant.STATE_IS_NOT_VARIBALE.getExplanation().equals(e.getMessage())){
+                resultMsg = ResultUtil.success(Constant.STATE_IS_NOT_VARIBALE.getExplanation(),null);
+            }else
+                resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
+    @RequestMapping(value = "deleteWj/{wjId}",method = RequestMethod.GET)
+    @ApiOperation(value = "删除问卷", notes = "删除问卷")
+    @ResponseBody
+    public ResultMsg deleteWj(@PathVariable Integer wjId){
+        ResultMsg resultMsg;
+        try {
+            wjService.deleteWj(wjId);
+            resultMsg = ResultUtil.success("删除问卷",wjId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(Constant.STATE_IS_NOT_VARIBALE.getExplanation().equals(e.getMessage())){
+                resultMsg = ResultUtil.success(Constant.STATE_IS_NOT_VARIBALE.getExplanation(),null);
+            }else
+                resultMsg = ResultUtil.systemError();
+        }
+        return resultMsg;
+    }
+
 
    /* @RequestMapping(value = "updateWjState",method = RequestMethod.POST)
     @ApiOperation(value = "修改问卷状态", notes = "修改问卷状态")
