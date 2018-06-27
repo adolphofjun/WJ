@@ -146,7 +146,12 @@ public class WjdcController {
             resultMsg = ResultUtil.success("查询问卷题目成功",map);
         } catch (Exception e) {
             e.printStackTrace();
-            resultMsg = ResultUtil.systemError();
+            if(Constant.NOT_STARTED.getExplanation().equals(e.getMessage())){
+                resultMsg = ResultUtil.success(Constant.NOT_STARTED.getExplanation(),null);
+            }else  if(Constant.FINISHED.getExplanation().equals(e.getMessage())){
+                resultMsg = ResultUtil.success(Constant.FINISHED.getExplanation(),null);
+            }else
+                resultMsg = ResultUtil.systemError();
         }
         return resultMsg;
     }

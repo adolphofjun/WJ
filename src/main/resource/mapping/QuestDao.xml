@@ -23,5 +23,26 @@
           update qu_select_f set name = #{name},score = #{score} where id = #{id}
       </update>
 
+    <delete id="deleteQuestion" parameterType="java.lang.Integer">
+        delete from qu_question where id = #{quId}
+    </delete>
+    <delete id="deleteQuestSelectA" parameterType="java.lang.Integer">
+        delete from qu_select_a where belong_qu = #{quId}
+    </delete>
+    <delete id="deleteQuestSelectB" parameterType="java.lang.Integer">
+        delete from qu_select_b where belong_qu = #{quId}
+    </delete>
+    <delete id="deleteQuestSelectC" parameterType="java.lang.Integer">
+        delete from qu_select_c where belong_qu = #{quId}
+    </delete>
+    <delete id="deleteQuestSelectD" parameterType="java.lang.Integer">
+        delete from qu_select_d where belong_qu = #{quId}
+    </delete>
+    <delete id="deleteQuestSelectE" parameterType="java.lang.Integer">
+        delete from qu_select_e where belong_qu = #{quId}
+    </delete>
+    <delete id="deleteQuestSelectF" parameterType="java.lang.Integer">
+        delete from qu_select_f where belong_qu = #{quId}
+    </delete>
 
 </mapper>

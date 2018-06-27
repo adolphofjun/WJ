@@ -29,7 +29,7 @@ public class WjJfServiceImpl implements WjJfService {
         map.put("answerTime", DateUtils.format(DateUtils.getNowDate(),DateUtils.DEFAULT_REGEX_YYYY_MM_DD_HH_MIN_SS));
         wjJfDao.saveEveryOneRecord(map);
         map.put("isDelete",1);
-        wjDao.updateWjTitleIsDelete(map);
+        //wjDao.updateWjTitleIsDelete(map);
     }
 
     public void saveSumRecord(Map map) {

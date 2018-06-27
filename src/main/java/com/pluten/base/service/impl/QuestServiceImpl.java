@@ -21,6 +21,17 @@ public class QuestServiceImpl implements QuestService {
         questDao.editQuest(map);
         editSelect(quId,selectList);
     }
+
+    public void deleteQuest(Integer quId) {
+        questDao.deleteQuestion(quId);
+        questDao.deleteQuestSelectA(quId);
+        questDao.deleteQuestSelectB(quId);
+        questDao.deleteQuestSelectC(quId);
+        questDao.deleteQuestSelectD(quId);
+        questDao.deleteQuestSelectE(quId);
+        questDao.deleteQuestSelectF(quId);
+    }
+
     public void editSelect(String quId,List list){
         for(int i=0; i<list.size(); i++){
             Map listItem = (Map) list.get(i);

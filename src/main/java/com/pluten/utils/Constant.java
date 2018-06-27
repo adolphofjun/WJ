@@ -4,7 +4,9 @@ public enum Constant {
 
     STATE_IS_NOT_VARIBALE("状态不可变"),
     ARGUMENT_EXCEPTION("参数异常"),
-    QUESTION_NOT_ENOUGH("题库中数量不够");
+    QUESTION_NOT_ENOUGH("题库中数量不够"),
+    NOT_STARTED("未开始"),
+    FINISHED("已结束");
     private String code ;
     private String Explanation ;
 

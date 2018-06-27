@@ -206,7 +206,7 @@
     </select>
 
     <update id="updateWjTitleIsDelete" parameterType="map">
-        update wj_title set isDelete = #{isDelete}  where wjId = #{wjId}
+        update wj_title set isDelete = #{isDelete}  where id = #{wjId}
     </update>
     <delete id="deleteTargetOfWj" parameterType="java.lang.Integer">
         delete from wj_title where id = #{wjId}
@@ -218,6 +218,10 @@
     <update id="updateWjState" parameterType="map">
         update wj_title set visibility = #{visibility}  where id = #{wjId}
     </update>
+
+    <select id="isCanAnswer" parameterType="java.lang.Integer" resultType="map">
+        select visibility,isDelete,startTime,endTime from wj_title where id = #{wjId}
+    </select>
 
 
 

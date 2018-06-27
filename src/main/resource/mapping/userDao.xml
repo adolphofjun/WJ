@@ -36,6 +36,9 @@
             <if test="deptCode!=null">
                 and dept.code = #{deptCode}
             </if>
+            <if test="code!=null">
+                and emp.code = #{code}
+            </if>
         </if>
         <if test="SQL_TYPE_KEY == 2">
             SELECT

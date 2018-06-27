@@ -29,7 +29,7 @@ public interface WjJfDao {
 
     /**
      * 查询某一个人的得分纪录
-     * @param map
+     * @param map wjId  targetId
      * @return
      */
     List<Map> findAnswerRecordSum(Map map);

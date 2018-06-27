@@ -83,4 +83,11 @@ public interface WjDao {
 
     void updateWjState(Map map);
 
+    /**
+     * 判断问卷是否可以进行答题
+     * @param wjId
+     * @return
+     */
+    Map isCanAnswer(Integer wjId);
+
 }

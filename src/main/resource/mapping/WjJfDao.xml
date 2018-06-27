@@ -18,8 +18,8 @@
             from wj_record_everyone wj
             left join sys_emp answer on wj.answerId = answer.id
             left join sys_emp target on wj.targetId = target.id
-             left wj_title wjtitle on wj.wjId = wjtitle.id
-            where wj.id = #{wjId} and wj.targetId = #{targetId}
+             left join wj_title wjtitle on wj.wjId = wjtitle.id
+            where wj.wjId = #{wjId} and wj.targetId = #{targetId}
             order by wj.score
     </select>
 

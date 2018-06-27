@@ -8,12 +8,10 @@ import com.pluten.utils.ResultMsg;
 import com.pluten.utils.ResultUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -39,6 +37,22 @@ public class QuestController {
                 resultMsg = ResultUtil.success(Constant.STATE_IS_NOT_VARIBALE.getExplanation(),quest);
             }else
                 resultMsg = ResultUtil.systemError();
+        }
+        return JSON.toJSONString(resultMsg);
+    }
+
+
+    @RequestMapping(value = "deleteQuest/{quId}",method = RequestMethod.GET)
+    @ApiOperation(value = "删除题目", notes = "删除题目")
+    @ResponseBody
+    public String deleteQuest(@PathVariable Integer quId){
+        ResultMsg resultMsg;
+        try {
+            questService.deleteQuest(quId);
+            resultMsg = ResultUtil.success("修改题目成功",null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMsg = ResultUtil.systemError();
         }
         return JSON.toJSONString(resultMsg);
     }

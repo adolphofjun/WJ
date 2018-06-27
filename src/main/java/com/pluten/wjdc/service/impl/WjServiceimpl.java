@@ -9,10 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("wjService")
 public class WjServiceimpl implements WjService {
@@ -81,10 +78,14 @@ public class WjServiceimpl implements WjService {
         Map map = new HashMap();
         map.put(Globel.SQL_TYPE_KEY,Globel.SQL_TYPE_VLUE);
         map.put("visibility",1);
+        map.put("isDelete",0);
         return wjDao.findWjTitleList(map);
     }
 
+
+
     public Map findQuestByWjId(Integer wjId) {
+        isCanAnswer(wjId);
         Map wjTitle = wjDao.findWjTitle(wjId);
         List<Map> maps = wjDao.findWjQuestionByWj(wjId);
         for(int i=0; i<maps.size(); i++){
@@ -94,6 +95,26 @@ public class WjServiceimpl implements WjService {
         }
         wjTitle.put("quest",maps);
         return wjTitle;
+    }
+
+    /**
+     * 判断是否可以答题
+     * @param wjId
+     * @return
+     */
+    private void isCanAnswer(Integer wjId) {
+        Map map = wjDao.isCanAnswer(wjId);
+        int isDelete = (Integer) map.get("isDelete");
+        int visibility = (Integer) map.get("visibility");
+        Date startTime = (Date) map.get("startTime");
+        Date endTime = (Date) map.get("endTime");
+        Date nowTime = DateUtils.getNowDate();
+
+        if(nowTime.getTime()<startTime.getTime()){
+            throw  new MyException(Constant.NOT_STARTED.getExplanation());
+        }else if(nowTime.getTime()>endTime.getTime()){
+            throw  new MyException(Constant.FINISHED.getExplanation());
+        }
     }
 
     public Integer isExisted(Map map) {

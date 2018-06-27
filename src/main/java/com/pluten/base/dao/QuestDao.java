@@ -15,12 +15,12 @@ public interface QuestDao {
     void editQuestSelectF(Map map);
     void editQuestSelectG(Map map);
     void editQuestSelectH(Map map);
-    void deleteQuestSelectA(Map map);
-    void deleteQuestSelectB(Map map);
-    void deleteQuestSelectC(Map map);
-    void deleteQuestSelectD(Map map);
-    void deleteQuestSelectE(Map map);
-    void deleteQuestSelectF(Map map);
-    void deleteQuestSelectG(Map map);
-    void deleteQuestSelectH(Map map);
+    void deleteQuestSelectA(Integer quId);
+    void deleteQuestSelectB(Integer quId);
+    void deleteQuestSelectC(Integer quId);
+    void deleteQuestSelectD(Integer quId);
+    void deleteQuestSelectE(Integer quId);
+    void deleteQuestSelectF(Integer quId);
+    void deleteQuestSelectG(Integer quId);
+    void deleteQuestion(Integer quId);
 }
